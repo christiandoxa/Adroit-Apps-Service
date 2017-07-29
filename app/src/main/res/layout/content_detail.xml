@@ -1,16 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.v4.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_height="wrap_content"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
     tools:context="com.adroitdevs.adroitapps.adroitiotservice.DetailActivity"
     tools:showIn="@layout/activity_detail">
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         android:orientation="vertical"
         android:paddingLeft="16dp"
         android:paddingRight="16dp"
@@ -26,16 +26,12 @@
                 android:id="@+id/bOtomatis"
                 android:layout_width="150dp"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="13dp"
-                android:layout_marginRight="15dp"
                 android:text="Manual" />
 
             <Button
                 android:id="@+id/bManual"
                 android:layout_width="150dp"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="15dp"
-                android:layout_marginRight="15dp"
                 android:text="Otomatis" />
         </LinearLayout>
 
@@ -49,7 +45,7 @@
                 android:layout_width="60dp"
                 android:layout_height="60dp"
                 android:scaleType="centerCrop"
-                tools:src="@mipmap/ic_launcher" />
+                android:src="@drawable/ic_cahaya" />
 
             <TextView
                 android:id="@+id/tvCahaya"
@@ -61,8 +57,8 @@
                 android:layout_toEndOf="@+id/icon_cahaya"
                 android:layout_toRightOf="@+id/icon_cahaya"
                 android:maxLines="1"
-                android:textAppearance="@style/TextAppearance.AppCompat.Title"
-                tools:text="Cahaya" />
+                android:text="Cahaya"
+                android:textAppearance="@style/TextAppearance.AppCompat.Title" />
 
             <TextView
                 android:id="@+id/tvNilaiCahaya"
@@ -87,7 +83,7 @@
                 android:layout_width="60dp"
                 android:layout_height="60dp"
                 android:scaleType="centerCrop"
-                tools:src="@mipmap/ic_launcher" />
+                android:src="@drawable/ic_hujan" />
 
             <TextView
                 android:id="@+id/tvHujan"
@@ -99,8 +95,8 @@
                 android:layout_toEndOf="@+id/icon_hujan"
                 android:layout_toRightOf="@+id/icon_hujan"
                 android:maxLines="1"
-                android:textAppearance="@style/TextAppearance.AppCompat.Title"
-                tools:text="Curah Hujan" />
+                android:text="Curah Hujan"
+                android:textAppearance="@style/TextAppearance.AppCompat.Title" />
 
             <TextView
                 android:id="@+id/tvNilaiHujan"
@@ -125,7 +121,7 @@
                 android:layout_width="60dp"
                 android:layout_height="60dp"
                 android:scaleType="centerCrop"
-                tools:src="@mipmap/ic_launcher" />
+                android:src="@drawable/ic_waktu" />
 
             <TextView
                 android:id="@+id/tvKering"
@@ -137,8 +133,8 @@
                 android:layout_toEndOf="@+id/icon_kering"
                 android:layout_toRightOf="@+id/icon_kering"
                 android:maxLines="1"
-                android:textAppearance="@style/TextAppearance.AppCompat.Title"
-                tools:text="Perkiraan Waktu" />
+                android:text="Perkiraan Waktu"
+                android:textAppearance="@style/TextAppearance.AppCompat.Title" />
 
             <TextView
                 android:id="@+id/tvNilaiKering"
@@ -163,7 +159,7 @@
                 android:layout_width="60dp"
                 android:layout_height="60dp"
                 android:scaleType="centerCrop"
-                tools:src="@mipmap/ic_launcher" />
+                android:src="@drawable/ic_status" />
 
             <TextView
                 android:id="@+id/tvStatus"
@@ -175,8 +171,8 @@
                 android:layout_toEndOf="@+id/icon_status"
                 android:layout_toRightOf="@+id/icon_status"
                 android:maxLines="1"
-                android:textAppearance="@style/TextAppearance.AppCompat.Title"
-                tools:text="Status" />
+                android:text="Status"
+                android:textAppearance="@style/TextAppearance.AppCompat.Title" />
 
             <TextView
                 android:id="@+id/tvNilaiStatus"
@@ -202,4 +198,4 @@
 
     </LinearLayout>
 
-</android.support.v4.widget.NestedScrollView>
+</LinearLayout>

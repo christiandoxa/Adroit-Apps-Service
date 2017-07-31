@@ -34,7 +34,6 @@ public class DeviceAdapter extends RecyclerView.Adapter<DeviceAdapter.ViewHolder
     public void onBindViewHolder(ViewHolder holder, int position) {
         Device device = deviceList.get(position);
         holder.tvDevice.setText(device.namaDevice);
-        holder.tvStatus.setText(device.statusDevice);
     }
 
     @Override
@@ -46,12 +45,10 @@ public class DeviceAdapter extends RecyclerView.Adapter<DeviceAdapter.ViewHolder
 
     public class ViewHolder extends RecyclerView.ViewHolder {
         TextView tvDevice;
-        TextView tvStatus;
 
         public ViewHolder(View itemView) {
             super(itemView);
             tvDevice = (TextView) itemView.findViewById(R.id.tvDevice);
-            tvStatus = (TextView) itemView.findViewById(R.id.tvDeskripsi);
         }
     }
 }

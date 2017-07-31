@@ -7,26 +7,16 @@
 
     <TextView
         android:id="@+id/tvDevice"
-        android:layout_width="225dp"
+        android:layout_width="125dp"
         android:layout_height="wrap_content"
         android:layout_marginLeft="8dp"
         android:layout_marginStart="8dp"
         android:ellipsize="end"
         android:maxLines="1"
         android:text="Nama Device / Device ID"
-        android:textAppearance="@style/TextAppearance.AppCompat.Title" />
-
-    <TextView
-        android:id="@+id/tvDeskripsi"
-        android:layout_width="225dp"
-        android:layout_height="wrap_content"
-        android:layout_alignLeft="@+id/tvDevice"
-        android:layout_alignStart="@+id/tvDevice"
-        android:layout_below="@+id/tvDevice"
-        android:ellipsize="end"
-        android:maxLines="1"
-        android:text="Status Device"
-        android:textAppearance="@style/TextAppearance.AppCompat.Medium" />
+        android:textAppearance="@style/TextAppearance.AppCompat.Title"
+        android:textColor="@color/textOnS"
+        android:textSize="16dip" />
 
     <Switch
         android:id="@+id/switchStatusDevice"

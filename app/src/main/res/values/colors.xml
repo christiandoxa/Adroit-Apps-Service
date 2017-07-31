@@ -10,4 +10,6 @@
     <color name="textOnP">#ffebee</color>
     <color name="colorAccent">#ffff6b</color>
     <color name="transparentBack">#26ffebee</color>
+    <color name="transparentBack2">#99ffebee</color>
+    <color name="transparentBack0">#00ffebee</color>
 </resources>

@@ -1,0 +1,301 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#41aba0"
+    android:orientation="vertical"
+    tools:context="com.adroitdevs.adroitapps.adroitiotservice.DetailsActivity">
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="15dp"
+        android:orientation="horizontal">
+
+        <ImageView
+            android:layout_width="55dp"
+            android:layout_height="55dp"
+            android:src="@drawable/icon_grey" />
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="15dp"
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Dhenarra "
+                android:textColor="@color/textOnP"
+                android:textSize="25sp" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="dhenarra@gmail.com"
+                android:textColor="@color/textOnP" />
+        </LinearLayout>
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="300dp"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:background="@drawable/back"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:paddingBottom="5dp"
+                android:paddingLeft="5dp"
+                android:paddingTop="8dp"
+                android:src="@drawable/ic_arrow_back" />
+
+            <TextView
+                android:id="@+id/namaDevice"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:paddingBottom="5dp"
+                android:paddingLeft="5dp"
+                android:paddingTop="5dp"
+                android:shadowColor="#7F000000"
+                android:shadowDx="-1"
+                android:shadowDy="-1"
+                android:shadowRadius="1"
+                android:text="Andromeda"
+                android:textColor="@color/textOnP"
+                android:textSize="24dip"
+                android:textStyle="bold" />
+        </LinearLayout>
+
+
+        <TextView
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginBottom="5dp"
+            android:layout_marginTop="5dp"
+            android:gravity="center"
+            android:text="Details Status"
+            android:textColor="@color/textOnP"
+            android:textSize="16dip" />
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="12dp"
+            android:background="?android:attr/selectableItemBackground">
+
+            <ImageView
+                android:id="@+id/icon_cahaya"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:paddingLeft="5dp"
+                android:scaleType="centerCrop"
+                android:src="@drawable/ic_cahaya" />
+
+            <TextView
+                android:id="@+id/tvCahaya"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignParentTop="true"
+                android:layout_marginLeft="8dp"
+                android:layout_marginStart="8dp"
+                android:layout_toEndOf="@+id/icon_cahaya"
+                android:layout_toRightOf="@+id/icon_cahaya"
+                android:maxLines="1"
+                android:text="Cahaya"
+                android:textColor="@color/textOnP"
+                android:textSize="16dip"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/tvNilaiCahaya"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignLeft="@+id/tvCahaya"
+                android:layout_alignStart="@+id/tvCahaya"
+                android:layout_below="@+id/tvCahaya"
+                android:ellipsize="end"
+                android:maxLines="1"
+                android:text="123 Cd"
+                android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+                android:textColor="@color/textOnP"
+                android:textSize="21dip" />
+        </RelativeLayout><!--Cahaya-->
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="12dp"
+            android:background="?android:attr/selectableItemBackground">
+
+            <ImageView
+                android:id="@+id/icon_hujan"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:paddingLeft="5dp"
+                android:scaleType="centerCrop"
+                android:src="@drawable/ic_hujan" />
+
+            <TextView
+                android:id="@+id/tvHujan"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignParentTop="true"
+                android:layout_marginLeft="8dp"
+                android:layout_marginStart="8dp"
+                android:layout_toEndOf="@+id/icon_hujan"
+                android:layout_toRightOf="@+id/icon_hujan"
+                android:maxLines="1"
+                android:text="Curah Hujan"
+                android:textColor="@color/textOnP"
+                android:textSize="16dip"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/tvNilaiHujan"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignLeft="@+id/tvHujan"
+                android:layout_alignStart="@+id/tvHujan"
+                android:layout_below="@+id/tvHujan"
+                android:ellipsize="end"
+                android:maxLines="1"
+                android:text="5 milimeter"
+                android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+                android:textColor="@color/textOnP"
+                android:textSize="21dip" />
+        </RelativeLayout><!--Hujan-->
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="12dp"
+            android:background="?android:attr/selectableItemBackground">
+
+            <ImageView
+                android:id="@+id/icon_kering"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:paddingLeft="5dp"
+                android:scaleType="centerCrop"
+                android:src="@drawable/ic_waktu" />
+
+            <TextView
+                android:id="@+id/tvKering"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignParentTop="true"
+                android:layout_marginLeft="8dp"
+                android:layout_marginStart="8dp"
+                android:layout_toEndOf="@+id/icon_kering"
+                android:layout_toRightOf="@+id/icon_kering"
+                android:maxLines="1"
+                android:text="Perkiraan Waktu"
+                android:textColor="@color/textOnP"
+                android:textSize="16dip"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/tvNilaiKering"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignLeft="@+id/tvKering"
+                android:layout_alignStart="@+id/tvKering"
+                android:layout_below="@+id/tvKering"
+                android:ellipsize="end"
+                android:maxLines="1"
+                android:text="35 Minutes"
+                android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+                android:textColor="@color/textOnP"
+                android:textSize="21dip" />
+        </RelativeLayout><!--Kering-->
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="12dp"
+            android:background="?android:attr/selectableItemBackground">
+
+            <ImageView
+                android:id="@+id/icon_status"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:paddingLeft="5dp"
+                android:scaleType="centerCrop"
+                android:src="@drawable/ic_status" />
+
+            <TextView
+                android:id="@+id/tvStatus"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignParentTop="true"
+                android:layout_marginLeft="8dp"
+                android:layout_marginStart="8dp"
+                android:layout_toEndOf="@+id/icon_status"
+                android:layout_toRightOf="@+id/icon_status"
+                android:maxLines="1"
+                android:text="Status"
+                android:textColor="@color/textOnP"
+                android:textSize="16dip"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/tvNilaiStatus"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignLeft="@+id/tvStatus"
+                android:layout_alignStart="@+id/tvStatus"
+                android:layout_below="@+id/tvStatus"
+                android:ellipsize="end"
+                android:maxLines="1"
+                android:text="Angkat"
+                android:textColor="@color/textOnP"
+                android:textSize="21sp" />
+
+            <Switch
+                android:id="@+id/switchStatus"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
+                android:layout_alignParentRight="true"
+                android:layout_centerVertical="true" />
+        </RelativeLayout><!--Servo-->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginBottom="12dp"
+            android:orientation="horizontal"
+            android:paddingLeft="5dp"
+            android:paddingRight="5dp">
+
+            <Button
+                android:id="@+id/bOtomatis"
+                android:layout_width="125dp"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="15dp"
+                android:background="@drawable/rounded"
+                android:text="Manual"
+                android:textColor="@color/textOnP"
+                android:textStyle="bold" />
+
+            <Button
+                android:id="@+id/bManual"
+                android:layout_width="125dp"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="5dp"
+                android:background="@drawable/rounded"
+                android:text="Otomatis"
+                android:textColor="@color/textOnP"
+                android:textStyle="bold" />
+        </LinearLayout>
+    </LinearLayout>
+</LinearLayout>

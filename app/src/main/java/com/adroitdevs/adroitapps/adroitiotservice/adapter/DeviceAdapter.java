@@ -11,13 +11,9 @@ import com.adroitdevs.adroitapps.adroitiotservice.model.Device;
 
 import java.util.ArrayList;
 
-/**
- * Created by dhenarra on 27/07/2017.
- */
-
 public class DeviceAdapter extends RecyclerView.Adapter<DeviceAdapter.ViewHolder> {
 
-    ArrayList<Device> deviceList;
+    private ArrayList<Device> deviceList;
 
     public DeviceAdapter(ArrayList<Device> deviceList) {
         this.deviceList = deviceList;
@@ -26,8 +22,7 @@ public class DeviceAdapter extends RecyclerView.Adapter<DeviceAdapter.ViewHolder
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.device_list, parent, false);
-        ViewHolder vh = new ViewHolder(v);
-        return vh;
+        return new ViewHolder(v);
     }
 
     @Override
@@ -44,11 +39,11 @@ public class DeviceAdapter extends RecyclerView.Adapter<DeviceAdapter.ViewHolder
         return 0;
     }
 
-    public class ViewHolder extends RecyclerView.ViewHolder {
+    class ViewHolder extends RecyclerView.ViewHolder {
         TextView tvDevice;
         TextView tvStatus;
 
-        public ViewHolder(View itemView) {
+        ViewHolder(View itemView) {
             super(itemView);
             tvDevice = (TextView) itemView.findViewById(R.id.tvDevice);
             tvStatus = (TextView) itemView.findViewById(R.id.tvDeskripsi);

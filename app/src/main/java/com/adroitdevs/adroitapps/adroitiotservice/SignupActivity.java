@@ -16,15 +16,15 @@ import butterknife.InjectView;
 public class SignupActivity extends AppCompatActivity {
 
     @InjectView(R.id.etNama)
-    EditText _nameText;
+    EditText nameText;
     @InjectView(R.id.etEmail)
-    EditText _emailText;
+    EditText emailText;
     @InjectView(R.id.etPassword)
-    EditText _passText;
+    EditText passText;
     @InjectView(R.id.bSignUp)
-    Button _signupButton;
+    Button signupButton;
     @InjectView(R.id.link_login)
-    TextView _loginLink;
+    TextView loginLink;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -32,14 +32,14 @@ public class SignupActivity extends AppCompatActivity {
         setContentView(R.layout.activity_signup);
         ButterKnife.inject(this);
 
-        _signupButton.setOnClickListener(new View.OnClickListener() {
+        signupButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 signup();
             }
         });
 
-        _loginLink.setOnClickListener(new View.OnClickListener() {
+        loginLink.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 startActivity(new Intent(SignupActivity.this, LoginActivity.class));
@@ -53,15 +53,15 @@ public class SignupActivity extends AppCompatActivity {
             return;
         }
 
-        _signupButton.setEnabled(false);
+        signupButton.setEnabled(false);
         final ProgressDialog pd = new ProgressDialog(SignupActivity.this, R.style.Theme_AppCompat_DayNight_Dialog);
         pd.setIndeterminate(true);
         pd.setMessage("Authenticating...");
         pd.show();
 
-        String nama = _nameText.getText().toString();
-        String email = _emailText.getText().toString();
-        String pass = _passText.getText().toString();
+        String nama = nameText.getText().toString();
+        String email = emailText.getText().toString();
+        String pass = passText.getText().toString();
 
         new android.os.Handler().postDelayed(
                 new Runnable() {
@@ -75,41 +75,41 @@ public class SignupActivity extends AppCompatActivity {
     }
 
     private void onSignUpSuccess() {
-        _signupButton.setEnabled(true);
+        signupButton.setEnabled(true);
         setResult(RESULT_OK, null);
         finish();
     }
 
     private void onSignUpFailed() {
-        Toast.makeText(getBaseContext(), "Sign up failed", Toast.LENGTH_LONG);
-        _signupButton.setEnabled(true);
+        Toast.makeText(getBaseContext(), "Sign up failed", Toast.LENGTH_LONG).show();
+        signupButton.setEnabled(true);
     }
 
     private boolean validate() {
         boolean valid = true;
-        String name = _nameText.getText().toString();
-        String email = _emailText.getText().toString();
-        String pass = _passText.getText().toString();
+        String name = nameText.getText().toString();
+        String email = emailText.getText().toString();
+        String pass = passText.getText().toString();
 
         if (name.isEmpty() || name.length() < 3) {
-            _nameText.setError("at least 3 charactes");
+            nameText.setError("at least 3 charactes");
             valid = false;
         } else {
-            _emailText.setError(null);
+            emailText.setError(null);
         }
 
         if (email.isEmpty() || !android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
-            _emailText.setError("enter a valid email address");
+            emailText.setError("enter a valid email address");
             valid = false;
         } else {
-            _emailText.setError(null);
+            emailText.setError(null);
         }
 
         if (pass.isEmpty() || pass.length() < 4 || pass.length() > 25) {
-            _passText.setError("between 4 and 25 alphanumeric characters");
+            passText.setError("between 4 and 25 alphanumeric characters");
             valid = false;
         } else {
-            _passText.setError(null);
+            passText.setError(null);
         }
         return valid;
     }

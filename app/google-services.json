@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "504970048583",
+    "firebase_url": "https://adroit-iot-service.firebaseio.com",
+    "project_id": "adroit-iot-service",
+    "storage_bucket": "adroit-iot-service.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:504970048583:android:545acf442504d052",
+        "android_client_info": {
+          "package_name": "com.adroitdevs.adroitapps.adroitiotservice"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "504970048583-grbu2ldsqpelk1are53v42c1r1dsir8m.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.adroitdevs.adroitapps.adroitiotservice",
+            "certificate_hash": "3932e2d9090d6c51c5adbb9e7c6e0a1d6f10f5d5"
+          }
+        },
+        {
+          "client_id": "504970048583-3smrjndqu7ac4581i195bpa445nk7cd2.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDuQ4DNoudu6AQIL5JiiJTgxmf_9mqc6yw"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "504970048583-3smrjndqu7ac4581i195bpa445nk7cd2.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

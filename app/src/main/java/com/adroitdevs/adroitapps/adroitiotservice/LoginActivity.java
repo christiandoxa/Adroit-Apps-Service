@@ -17,13 +17,13 @@ public class LoginActivity extends AppCompatActivity {
     private static final int REQUEST_SIGNUP = 0;
 
     @InjectView(R.id.inputEmail)
-    EditText _emailText;
+    EditText emailText;
     @InjectView(R.id.inputPassword)
-    EditText _passText;
+    EditText passText;
     @InjectView(R.id.bLogin)
-    Button _loginButton;
+    Button loginButton;
     @InjectView(R.id.link_signUp)
-    TextView _signupLink;
+    TextView signupLink;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -31,14 +31,14 @@ public class LoginActivity extends AppCompatActivity {
         setContentView(R.layout.activity_login);
         ButterKnife.inject(this);
 
-        _loginButton.setOnClickListener(new View.OnClickListener() {
+        loginButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 login();
             }
         });
 
-        _signupLink.setOnClickListener(new View.OnClickListener() {
+        signupLink.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent i = new Intent(getApplicationContext(), SignupActivity.class);
@@ -52,14 +52,14 @@ public class LoginActivity extends AppCompatActivity {
             onLoginFailed();
             return;
         }
-        _loginButton.setEnabled(false);
+        loginButton.setEnabled(false);
         final ProgressDialog pd = new ProgressDialog(LoginActivity.this, R.style.Theme_AppCompat_DayNight_Dialog);
         pd.setIndeterminate(true);
         pd.setMessage("Authenticating...");
         pd.show();
 
-        String email = _emailText.getText().toString();
-        String pass = _passText.getText().toString();
+        String email = emailText.getText().toString();
+        String pass = passText.getText().toString();
 
         new android.os.Handler().postDelayed(
                 new Runnable() {
@@ -87,32 +87,32 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     private void onLoginSuccess() {
-        _loginButton.setEnabled(true);
+        loginButton.setEnabled(true);
         finish();
     }
 
     private void onLoginFailed() {
         Toast.makeText(getBaseContext(), "Login Failed", Toast.LENGTH_LONG).show();
-        _loginButton.setEnabled(true);
+        loginButton.setEnabled(true);
     }
 
     private boolean validate() {
         boolean valid = true;
-        String email = _emailText.getText().toString();
-        String pass = _passText.getText().toString();
+        String email = emailText.getText().toString();
+        String pass = passText.getText().toString();
 
         if (email.isEmpty() || !android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
-            _emailText.setError(("Enter a valid email address"));
+            emailText.setError(("Enter a valid email address"));
             valid = false;
         } else {
-            _emailText.setError(null);
+            emailText.setError(null);
         }
 
         if (pass.isEmpty() || pass.length() < 4 || pass.length() > 15) {
-            _passText.setError(("between 4 and 15 alphanumeric characters"));
+            passText.setError(("between 4 and 15 alphanumeric characters"));
             valid = false;
         } else {
-            _passText.setError(null);
+            passText.setError(null);
         }
 
         return valid;

@@ -1,9 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#41aba0"
+    android:background="@color/colorPrimary"
     android:orientation="vertical"
     tools:context="com.adroitdevs.adroitapps.adroitiotservice.DetailsActivity">
 
@@ -51,13 +52,14 @@
             android:layout_height="wrap_content"
             android:orientation="horizontal">
 
-            <ImageView
+            <ImageButton
+                style="?android:attr/borderlessButtonStyle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:paddingBottom="5dp"
                 android:paddingLeft="5dp"
                 android:paddingTop="8dp"
-                android:src="@drawable/ic_arrow_back" />
+                app:srcCompat="@drawable/ic_arrow_back" />
 
             <TextView
                 android:id="@+id/namaDevice"
@@ -67,7 +69,7 @@
                 android:paddingBottom="5dp"
                 android:paddingLeft="5dp"
                 android:paddingTop="5dp"
-                android:shadowColor="#7F000000"
+                android:shadowColor="@color/shadow"
                 android:shadowDx="-1"
                 android:shadowDy="-1"
                 android:shadowRadius="1"

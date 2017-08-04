@@ -18,7 +18,7 @@ import java.util.ArrayList;
 
 public class DeviceAdapter extends RecyclerView.Adapter<DeviceAdapter.ViewHolder> {
 
-    ArrayList<Device> deviceList;
+    ArrayList<Device> deviceList = new ArrayList<>();
     IDeviceAdapter mIDeviceAdapter;
 
     public DeviceAdapter(Context context, ArrayList<Device> deviceList) {

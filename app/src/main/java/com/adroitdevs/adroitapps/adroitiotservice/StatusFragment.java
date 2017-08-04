@@ -16,7 +16,7 @@ import com.adroitdevs.adroitapps.adroitiotservice.model.Device;
 
 import java.util.ArrayList;
 
-public class StatusFragment extends Fragment implements DeviceAdapter.IDeviceAdapter {
+public class StatusFragment extends Fragment {
     IListener mListener;
     DeviceAdapter mAdapter;
     ArrayList<Device> mList = new ArrayList<>();
@@ -58,11 +58,6 @@ public class StatusFragment extends Fragment implements DeviceAdapter.IDeviceAda
             mList.add(new Device(arDevice[i], arDeskripsi[i]));
         }
         mAdapter.notifyDataSetChanged();
-    }
-
-    @Override
-    public void doDetails() {
-        mListener.changeFragments();
     }
 
     interface IListener {

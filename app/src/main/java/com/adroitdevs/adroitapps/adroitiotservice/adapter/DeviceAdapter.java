@@ -1,5 +1,6 @@
 package com.adroitdevs.adroitapps.adroitiotservice.adapter;
 
+import android.content.Context;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -18,9 +19,11 @@ import java.util.ArrayList;
 public class DeviceAdapter extends RecyclerView.Adapter<DeviceAdapter.ViewHolder> {
 
     ArrayList<Device> deviceList;
+    IDeviceAdapter mIDeviceAdapter;
 
-    public DeviceAdapter(ArrayList<Device> deviceList) {
+    public DeviceAdapter(Context context, ArrayList<Device> deviceList) {
         this.deviceList = deviceList;
+        mIDeviceAdapter = (IDeviceAdapter) context;
     }
 
     @Override
@@ -43,12 +46,25 @@ public class DeviceAdapter extends RecyclerView.Adapter<DeviceAdapter.ViewHolder
         return 0;
     }
 
+    public interface IDeviceAdapter {
+        void doDetails();
+    }
+
     public class ViewHolder extends RecyclerView.ViewHolder {
         TextView tvDevice;
+        TextView linkMore;
 
         public ViewHolder(View itemView) {
             super(itemView);
             tvDevice = (TextView) itemView.findViewById(R.id.tvDevice);
+            linkMore = (TextView) itemView.findViewById(R.id.linkMore);
+
+            linkMore.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    mIDeviceAdapter.doDetails();
+                }
+            });
         }
     }
 }

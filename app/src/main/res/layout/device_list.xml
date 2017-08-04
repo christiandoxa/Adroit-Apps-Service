@@ -16,30 +16,45 @@
         <ImageView
             android:id="@+id/flag"
             android:layout_width="fill_parent"
-            android:layout_height="100dp"
+            android:layout_height="110dp"
             android:layout_alignParentLeft="true"
             android:layout_alignParentRight="true"
             android:scaleType="fitXY"
-            android:src="@color/colorPrimary" />
+            android:src="@color/transparentBack0" />
 
         <TextView
             android:id="@+id/tvDevice"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignParentTop="true"
-            android:layout_centerHorizontal="true"
+            android:layout_alignBottom="@+id/flag"
+            android:layout_marginLeft="10dp"
             android:layout_marginTop="50dp"
             android:maxLines="1"
             android:text="Nama Device / Device ID"
             android:textColor="@color/textOnP"
-            android:textSize="16dip" />
+            android:textSize="22dip"
+            android:textStyle="bold" />
 
         <Switch
             android:id="@+id/switchStatusDevice"
             style="?android:attr/borderlessButtonStyle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/flag" />
+            android:layout_alignParentRight="true"
+            android:layout_marginRight="5dp" />
+
+        <TextView
+            android:id="@+id/linkMore"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/flag"
+            android:layout_marginTop="5dp"
+            android:background="@drawable/blurry_panel"
+            android:gravity="center_horizontal"
+            android:text="More"
+            android:textColor="@color/colorPrimary"
+            android:textSize="16dip"
+            android:textStyle="bold" />
     </RelativeLayout>
 
 

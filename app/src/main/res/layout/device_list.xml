@@ -2,7 +2,7 @@
 <android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/cardView"
     android:layout_width="match_parent"
-    android:layout_height="150dp"
+    android:layout_height="420dp"
     android:layout_gravity="center"
     android:layout_marginBottom="@dimen/activity_vertical_margin"
     android:layout_marginLeft="@dimen/activity_horizontal_margin"
@@ -16,23 +16,33 @@
         <ImageView
             android:id="@+id/flag"
             android:layout_width="fill_parent"
-            android:layout_height="110dp"
+            android:layout_height="60dp"
             android:layout_alignParentLeft="true"
             android:layout_alignParentRight="true"
             android:scaleType="fitXY"
-            android:src="@color/transparentBack0" />
+            android:src="@color/colorPrimaryDark" />
+
+        <ImageView
+            android:id="@+id/flag2"
+            android:layout_width="fill_parent"
+            android:layout_height="30dp"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentRight="true"
+            android:layout_below="@+id/flag"
+            android:scaleType="fitXY"
+            android:src="@color/colorPrimaryLight" />
 
         <TextView
             android:id="@+id/tvDevice"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignBottom="@+id/flag"
-            android:layout_marginLeft="10dp"
-            android:layout_marginTop="50dp"
+            android:layout_alignTop="@+id/flag"
+            android:layout_marginLeft="20dp"
+            android:layout_marginTop="13dp"
             android:maxLines="1"
             android:text="Nama Device / Device ID"
             android:textColor="@color/textOnP"
-            android:textSize="22dip"
+            android:textSize="24dip"
             android:textStyle="bold" />
 
         <Switch
@@ -44,17 +54,188 @@
             android:layout_marginRight="5dp" />
 
         <TextView
-            android:id="@+id/linkMore"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_below="@id/flag"
             android:layout_marginTop="5dp"
             android:background="@drawable/blurry_panel"
             android:gravity="center_horizontal"
-            android:text="More"
+            android:text="Device Details"
             android:textColor="@color/colorPrimary"
-            android:textSize="16dip"
+            android:textSize="18dip"
             android:textStyle="bold" />
+
+        <ImageView
+            android:id="@+id/icon_cahaya"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_below="@id/flag2"
+            android:layout_marginBottom="8dp"
+            android:layout_marginLeft="15dp"
+            android:layout_marginTop="15dp"
+            android:scaleType="centerCrop"
+            android:src="@drawable/ic_cahaya" />
+
+        <TextView
+            android:id="@+id/tvCahaya"
+            android:layout_width="125dp"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/flag2"
+            android:layout_marginLeft="8dp"
+            android:layout_marginTop="20dp"
+            android:layout_toRightOf="@+id/icon_cahaya"
+            android:maxLines="1"
+            android:text="Cahaya"
+            android:textColor="@color/colorPrimary"
+            android:textSize="20dip" />
+
+        <TextView
+            android:id="@+id/tvNilaiCahaya"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_below="@id/flag2"
+            android:layout_marginRight="35dp"
+            android:layout_marginTop="20dp"
+            android:maxLines="1"
+            android:text="100 cd"
+            android:textColor="@color/colorPrimary"
+            android:textSize="20dip"
+            android:textStyle="bold" />
+
+        <ImageView
+            android:id="@+id/icon_hujan"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_below="@id/icon_cahaya"
+            android:layout_marginBottom="8dp"
+            android:layout_marginLeft="15dp"
+            android:layout_marginTop="15dp"
+            android:scaleType="centerCrop"
+            android:src="@drawable/ic_hujan" />
+
+        <TextView
+            android:id="@+id/tvHujan"
+            android:layout_width="125dp"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/icon_cahaya"
+            android:layout_marginLeft="8dp"
+            android:layout_marginTop="15dp"
+            android:layout_toRightOf="@+id/icon_hujan"
+            android:maxLines="1"
+            android:text="Hujan"
+            android:textColor="@color/colorPrimary"
+            android:textSize="20dip" />
+
+        <TextView
+            android:id="@+id/tvNilaiHujan"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_below="@id/icon_cahaya"
+            android:layout_marginRight="35dp"
+            android:layout_marginTop="15dp"
+            android:maxLines="1"
+            android:text="5 mm"
+            android:textColor="@color/colorPrimary"
+            android:textSize="20dip"
+            android:textStyle="bold" />
+
+        <ImageView
+            android:id="@+id/icon_kering"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_below="@id/icon_hujan"
+            android:layout_marginBottom="8dp"
+            android:layout_marginLeft="15dp"
+            android:layout_marginTop="15dp"
+            android:scaleType="centerCrop"
+            android:src="@drawable/ic_waktu" />
+
+        <TextView
+            android:id="@+id/tvKering"
+            android:layout_width="125dp"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/icon_hujan"
+            android:layout_marginLeft="8dp"
+            android:layout_marginTop="15dp"
+            android:layout_toRightOf="@+id/icon_kering"
+            android:maxLines="1"
+            android:text="Waktu Kering"
+            android:textColor="@color/colorPrimary"
+            android:textSize="20dip" />
+
+        <TextView
+            android:id="@+id/tvNilaiKering"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_below="@id/icon_hujan"
+            android:layout_marginRight="35dp"
+            android:layout_marginTop="15dp"
+            android:maxLines="1"
+            android:text="35'"
+            android:textColor="@color/colorPrimary"
+            android:textSize="20dip"
+            android:textStyle="bold" />
+
+        <ImageView
+            android:id="@+id/icon_status"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_below="@id/icon_kering"
+            android:layout_marginBottom="8dp"
+            android:layout_marginLeft="15dp"
+            android:layout_marginTop="15dp"
+            android:scaleType="centerCrop"
+            android:src="@drawable/ic_status" />
+
+        <TextView
+            android:id="@+id/tvHujan"
+            android:layout_width="125dp"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/icon_kering"
+            android:layout_marginLeft="8dp"
+            android:layout_marginTop="15dp"
+            android:layout_toRightOf="@+id/icon_status"
+            android:maxLines="1"
+            android:text="Angkat"
+            android:textColor="@color/colorPrimary"
+            android:textSize="20dip" />
+
+        <Switch
+            android:id="@+id/switchAngkat"
+            style="?android:attr/borderlessButtonStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_below="@id/icon_kering"
+            android:layout_marginRight="15dp" />
+
+        <Button
+            android:id="@+id/bOtomatis"
+            android:layout_width="125dp"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_below="@id/icon_status"
+            android:layout_marginLeft="35dp"
+            android:layout_marginTop="10dp"
+            android:text="Manual"
+            android:textColor="@color/textOnP"
+            android:textStyle="bold" />
+
+        <Button
+            android:id="@+id/bManual"
+            android:layout_width="125dp"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_below="@id/icon_status"
+            android:layout_marginRight="35dp"
+            android:layout_marginTop="10dp"
+            android:text="Otomatis"
+            android:textColor="@color/textOnP"
+            android:textStyle="bold" />
+
     </RelativeLayout>
 
 

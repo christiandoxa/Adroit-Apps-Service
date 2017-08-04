@@ -57,14 +57,6 @@ public class DeviceAdapter extends RecyclerView.Adapter<DeviceAdapter.ViewHolder
         public ViewHolder(View itemView) {
             super(itemView);
             tvDevice = (TextView) itemView.findViewById(R.id.tvDevice);
-            linkMore = (TextView) itemView.findViewById(R.id.linkMore);
-
-            linkMore.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    mIDeviceAdapter.doDetails();
-                }
-            });
         }
     }
 }

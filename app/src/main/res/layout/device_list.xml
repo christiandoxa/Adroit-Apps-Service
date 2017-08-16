@@ -191,7 +191,7 @@
             android:src="@drawable/ic_status" />
 
         <TextView
-            android:id="@+id/tvHujan"
+            android:id="@+id/tvStat"
             android:layout_width="125dp"
             android:layout_height="wrap_content"
             android:layout_below="@id/icon_kering"
@@ -213,25 +213,35 @@
             android:layout_marginRight="15dp" />
 
         <Button
-            android:id="@+id/bOtomatis"
+            android:id="@+id/bManual"
             android:layout_width="125dp"
             android:layout_height="wrap_content"
             android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
             android:layout_below="@id/icon_status"
+            android:layout_marginEnd="20dp"
             android:layout_marginLeft="35dp"
+            android:layout_marginRight="20dp"
+            android:layout_marginStart="35dp"
             android:layout_marginTop="10dp"
+            android:width="125dp"
             android:text="Manual"
             android:textColor="@color/textOnP"
             android:textStyle="bold" />
 
         <Button
-            android:id="@+id/bManual"
+            android:id="@+id/bOtomatis"
             android:layout_width="125dp"
             android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
             android:layout_alignParentRight="true"
             android:layout_below="@id/icon_status"
+            android:layout_marginEnd="35dp"
+            android:layout_marginLeft="20dp"
             android:layout_marginRight="35dp"
+            android:layout_marginStart="20dp"
             android:layout_marginTop="10dp"
+            android:width="125dp"
             android:text="Otomatis"
             android:textColor="@color/textOnP"
             android:textStyle="bold" />

@@ -29,7 +29,7 @@
                 app:srcCompat="@drawable/ic_arrow_back" />
 
             <TextView
-                android:id="@+id/namaDevice"
+                android:id="@+id/device_id"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"

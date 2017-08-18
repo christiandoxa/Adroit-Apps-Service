@@ -94,7 +94,7 @@ public class StatusFragment extends Fragment implements DeviceAdapter.IDeviceAda
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-                Log.e("Status", error.getMessage());
+                Log.e("Status", error.toString());
                 progressDialog.dismiss();
                 Toast.makeText(getContext(), "Connection Error", Toast.LENGTH_LONG).show();
             }
@@ -123,7 +123,6 @@ public class StatusFragment extends Fragment implements DeviceAdapter.IDeviceAda
             @Override
             public void onResponse(String response) {
                 progressDialog.dismiss();
-                Toast.makeText(getContext(), response + " " + stat, Toast.LENGTH_LONG).show();
                 Log.d("ReqStat", response + " " + stat);
                 callback.onSuccess(true);
             }
@@ -131,8 +130,7 @@ public class StatusFragment extends Fragment implements DeviceAdapter.IDeviceAda
             @Override
             public void onErrorResponse(VolleyError error) {
                 progressDialog.dismiss();
-                Toast.makeText(getContext(), error.getMessage(), Toast.LENGTH_LONG).show();
-                Log.d("ReqStat", error.getMessage() + " " + stat);
+                Log.d("ReqStat", error.toString() + " " + stat);
                 callback.onSuccess(false);
             }
         }) {

@@ -96,6 +96,7 @@ public class StatusFragment extends Fragment implements DeviceAdapter.IDeviceAda
             public void onErrorResponse(VolleyError error) {
                 Log.e("Status", error.getMessage());
                 progressDialog.dismiss();
+                Toast.makeText(getContext(), "Connection Error", Toast.LENGTH_LONG).show();
             }
         }) {
             @Override
@@ -140,50 +141,6 @@ public class StatusFragment extends Fragment implements DeviceAdapter.IDeviceAda
                 Map<String, String> body = new HashMap<>();
                 body.put("id", device.device_id);
                 body.put("job", stat);
-                return body;
-            }
-
-            @Override
-            public Map<String, String> getHeaders() throws AuthFailureError {
-                Map<String, String> head = new HashMap<>();
-                head.put("Conten-Type", "application/json");
-                head.put("KEY", "aktVeD9lVzlpWld4QVoyMWhhV3d1WTI5dGJURXpNVGd5TWpObU9HUXpNRGN3T0RJd1pXTTRNell3T0RGa01UQXhOVE5qT0dGa09UVTJaVGc9IWpNUm9IVk1LRldISjVNUEdzTE40");
-                return head;
-            }
-        };
-        VolleySingleton.getInstance(this.getContext()).addToRequestQueue(request);
-    }
-
-    @Override
-    public void autom(final String auto, int id, final VolleyCallback callback) {
-        String url = "http://angkatin.arkademy.com/UserAPI";
-        final Device device = mList.get(id);
-        progressDialog = new ProgressDialog(this.getContext());
-        progressDialog.setMessage("Loading...");
-        progressDialog.setCancelable(false);
-        progressDialog.setCanceledOnTouchOutside(false);
-        progressDialog.show();
-        StringRequest request = new StringRequest(Request.Method.PUT, url, new Response.Listener<String>() {
-            @Override
-            public void onResponse(String response) {
-                progressDialog.dismiss();
-                Log.d("Autom", response);
-                callback.onSuccess(true);
-            }
-        }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                progressDialog.dismiss();
-                Toast.makeText(getContext(), error.getMessage(), Toast.LENGTH_LONG).show();
-                Log.e("Autom", error.toString());
-                callback.onSuccess(false);
-            }
-        }) {
-            @Override
-            protected Map<String, String> getParams() throws AuthFailureError {
-                Map<String, String> body = new HashMap<>();
-                body.put("id", device.device_id);
-                body.put("job", auto);
                 return body;
             }
 

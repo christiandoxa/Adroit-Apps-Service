@@ -11,6 +11,9 @@ public class MainActivity extends AppCompatActivity implements StatusFragment.IL
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        if (getIntent().getExtras() != null && getIntent().getExtras().getBoolean("EXIT", false)) {
+            finish();
+        }
         setContentView(R.layout.activity_main);
         tvNama = (TextView) findViewById(R.id.name);
         tvEmail = (TextView) findViewById(R.id.email);

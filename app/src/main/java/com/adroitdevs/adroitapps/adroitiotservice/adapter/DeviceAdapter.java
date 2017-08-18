@@ -54,18 +54,20 @@ public class DeviceAdapter extends RecyclerView.Adapter<DeviceAdapter.ViewHolder
         }
 
         holder.status.setOnCheckedChangeListener(new StatSwitch(holder, position));
+        holder.servoSwitch.setOnCheckedChangeListener(new servoSwitch(holder, position));
 
     }
 
-    public void on(ViewHolder holder, Device device) {
+    public void on(ViewHolder holder) {
         holder.manual.setEnabled(true);
         holder.auto.setEnabled(true);
-        holder.servoSwitch.setEnabled(device.auto.equals("Manual"));
+        holder.servoSwitch.setEnabled(true);
     }
 
     public void off(ViewHolder holder) {
         holder.manual.setEnabled(false);
         holder.auto.setEnabled(false);
+        holder.servoSwitch.setChecked(false);
         holder.servoSwitch.setEnabled(false);
     }
 
@@ -78,12 +80,9 @@ public class DeviceAdapter extends RecyclerView.Adapter<DeviceAdapter.ViewHolder
 
     public interface IDeviceAdapter {
         void status(String stat, int id, VolleyCallback callback);
-
-        //        void servo(String servo);
-        void autom(String auto, int id, VolleyCallback callback);
     }
 
-    public class StatSwitch implements CompoundButton.OnCheckedChangeListener {
+    class StatSwitch implements CompoundButton.OnCheckedChangeListener {
 
         ViewHolder holder;
         int id;
@@ -109,9 +108,12 @@ public class DeviceAdapter extends RecyclerView.Adapter<DeviceAdapter.ViewHolder
                         holder.status.setChecked(!b);
                     } else {
                         if (stat.equals("On")) {
-                            on(holder, device);
+                            on(holder);
                         } else {
+                            holder.servoSwitch.setOnCheckedChangeListener(null);
                             off(holder);
+                            holder.statusText.setText("angkat");
+                            holder.servoSwitch.setOnCheckedChangeListener(new servoSwitch(holder, id));
                         }
                     }
                     holder.status.setOnCheckedChangeListener(new StatSwitch(holder, id));
@@ -119,6 +121,40 @@ public class DeviceAdapter extends RecyclerView.Adapter<DeviceAdapter.ViewHolder
             });
         }
     }
+
+    class servoSwitch implements CompoundButton.OnCheckedChangeListener {
+
+        ViewHolder holder;
+        int id;
+        String servo = "";
+
+        public servoSwitch(ViewHolder holder, int id) {
+            this.holder = holder;
+            this.id = id;
+        }
+
+        @Override
+        public void onCheckedChanged(CompoundButton compoundButton, final boolean b) {
+            holder.servoSwitch.setOnCheckedChangeListener(null);
+            if (b) {
+                servo = "jemur";
+            } else {
+                servo = "angkat";
+            }
+            mIDeviceAdapter.status(servo, id, new VolleyCallback() {
+                @Override
+                public void onSuccess(boolean result) {
+                    if (!result) {
+                        holder.servoSwitch.setChecked(!b);
+                    } else {
+                        holder.statusText.setText(servo);
+                    }
+                    holder.servoSwitch.setOnCheckedChangeListener(new servoSwitch(holder, id));
+                }
+            });
+        }
+    }
+
 
     public class ViewHolder extends RecyclerView.ViewHolder {
         TextView tvDevice, cahayaText, hujanText, statusText;
@@ -139,7 +175,7 @@ public class DeviceAdapter extends RecyclerView.Adapter<DeviceAdapter.ViewHolder
             manual.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    mIDeviceAdapter.autom("Manual", getAdapterPosition(), new VolleyCallback() {
+                    mIDeviceAdapter.status("Manual", getAdapterPosition(), new VolleyCallback() {
                         @Override
                         public void onSuccess(boolean result) {
                             if (result) {
@@ -152,7 +188,7 @@ public class DeviceAdapter extends RecyclerView.Adapter<DeviceAdapter.ViewHolder
             auto.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    mIDeviceAdapter.autom("Otomatis", getAdapterPosition(), new VolleyCallback() {
+                    mIDeviceAdapter.status("Otomatis", getAdapterPosition(), new VolleyCallback() {
                         @Override
                         public void onSuccess(boolean result) {
                             if (result) {

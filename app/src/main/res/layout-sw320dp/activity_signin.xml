@@ -11,6 +11,7 @@
         android:layout_height="match_parent"
         android:background="@drawable/bgrect">
 
+
     </FrameLayout>
 
     <RelativeLayout
@@ -26,70 +27,52 @@
             android:layout_centerHorizontal="true" />
 
         <TextView
-            android:id="@+id/terms"
+            android:id="@+id/Create"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_above="@+id/signInButton"
+            android:layout_below="@+id/signin"
             android:layout_centerHorizontal="true"
-            android:layout_marginBottom="15dp"
-            android:text="Sudah punya akun? Masuk"
-            android:textColor="#ffffff"
-            android:textSize="17dp" />
+            android:layout_marginTop="12dp"
+            android:text="No account yet? Create one"
+            android:textColor="#ffffff" />
 
         <TextView
-            android:id="@+id/create"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:id="@+id/wolf"
+            android:layout_width="80dp"
+            android:layout_height="80dp"
             android:layout_centerHorizontal="true"
-            android:layout_marginTop="20dp"
-            android:text="BUAT AKUN"
-            android:textColor="#ffffff"
-            android:textSize="23dp" />
+            android:layout_marginTop="50dp"
+            android:background="@drawable/ic_apps"
+            android:textColor="#ffffff" />
 
 
         <TextView
-            android:id="@+id/conti"
+            android:id="@+id/signin"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_above="@+id/terms"
             android:layout_alignParentLeft="true"
             android:layout_alignParentStart="true"
-            android:layout_marginBottom="19dp"
+            android:layout_below="@+id/linearLayout"
+            android:layout_marginTop="17dp"
             android:background="@drawable/rect"
             android:gravity="center"
             android:padding="16dp"
-            android:text="LANJUT"
+            android:text="Sign In"
             android:textColor="#ffffff"
             android:textSize="19dp" />
 
-
         <LinearLayout
+            android:id="@+id/linearLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="-140dp"
+            android:layout_marginTop="-05dp"
             android:orientation="vertical">
-
-            <EditText
-                android:id="@+id/name"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="220dp"
-                android:background="@drawable/rect1"
-                android:drawableLeft="@drawable/user"
-                android:drawablePadding="16dp"
-                android:hint="Nama"
-                android:inputType="textCapWords"
-                android:paddingBottom="16dp"
-                android:paddingLeft="20dp"
-                android:paddingTop="16dp"
-                android:textColor="#fff"
-                android:textColorHint="#ffffff"></EditText>
 
             <EditText
                 android:id="@+id/email"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="20dp"
+                android:layout_marginTop="220dp"
                 android:background="@drawable/rect1"
                 android:drawableLeft="@drawable/email"
                 android:drawablePadding="16dp"
@@ -99,9 +82,7 @@
                 android:paddingLeft="20dp"
                 android:paddingTop="16dp"
                 android:textColor="#fff"
-                android:textColorHint="#ffffff"
-
-                ></EditText>
+                android:textColorHint="#ffffff"></EditText>
 
             <EditText
                 android:id="@+id/pass"
@@ -111,32 +92,14 @@
                 android:background="@drawable/rect1"
                 android:drawableLeft="@drawable/pass"
                 android:drawablePadding="16dp"
-                android:hint="Kata Sandi"
+                android:hint="Password"
                 android:inputType="textPassword"
                 android:paddingBottom="16dp"
                 android:paddingLeft="20dp"
                 android:paddingTop="16dp"
                 android:textColor="#fff"
                 android:textColorHint="#ffffff"></EditText>
-
-            <EditText
-                android:id="@+id/passconf"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="20dp"
-                android:background="@drawable/rect1"
-                android:drawableLeft="@drawable/pass"
-                android:drawablePadding="16dp"
-                android:hint="Konfirmasi Kata Sandi"
-                android:inputType="textPassword"
-                android:paddingBottom="16dp"
-                android:paddingLeft="20dp"
-                android:paddingTop="16dp"
-                android:textColor="#fff"
-                android:textColorHint="#ffffff"></EditText>
-
         </LinearLayout>
-
     </RelativeLayout>
 
 

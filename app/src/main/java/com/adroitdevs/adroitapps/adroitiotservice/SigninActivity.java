@@ -19,54 +19,49 @@ import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.SignInButton;
 import com.google.android.gms.common.api.GoogleApiClient;
 
-public class SignupActivity extends AppCompatActivity implements GoogleApiClient.OnConnectionFailedListener {
+public class SigninActivity extends AppCompatActivity implements GoogleApiClient.OnConnectionFailedListener {
 
-    private static final String TAG = SignupActivity.class.getSimpleName();
-    private static final int RC_SIGN_IN = 777;
-    EditText name, email, password, passwordKonf;
-    TextView conti, create, terms, buttonGoogleText;
+    private static final String TAG = SigninActivity.class.getSimpleName();
+    private static final int RC_SIGN_IN = 778;
+    EditText email, pass;
+    TextView signin, create, buttonGoogleText;
     SignInButton signInButton;
     private GoogleApiClient mGoogleApiClient;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_signup);
+        setContentView(R.layout.activity_signin);
 
         Typeface customFont = Typeface.createFromAsset(getAssets(), "font/Lato-Light.ttf");
-        name = (EditText) findViewById(R.id.name);
+
         email = (EditText) findViewById(R.id.email);
-        password = (EditText) findViewById(R.id.pass);
-        passwordKonf = (EditText) findViewById(R.id.passconf);
-        conti = (TextView) findViewById(R.id.conti);
-        create = (TextView) findViewById(R.id.create);
-        terms = (TextView) findViewById(R.id.terms);
+        pass = (EditText) findViewById(R.id.pass);
+        signin = (TextView) findViewById(R.id.signin);
+        create = (TextView) findViewById(R.id.Create);
         signInButton = (SignInButton) findViewById(R.id.signInButton);
         buttonGoogleText = (TextView) signInButton.getChildAt(0);
 
         buttonGoogleText.setText("Masuk dengan Google");
         buttonGoogleText.setTypeface(customFont);
-        name.setTypeface(customFont);
         email.setTypeface(customFont);
-        password.setTypeface(customFont);
-        passwordKonf.setTypeface(customFont);
-        conti.setTypeface(customFont);
+        pass.setTypeface(customFont);
+        signin.setTypeface(customFont);
         create.setTypeface(customFont);
-        terms.setTypeface(customFont);
 
-        GoogleSignInOptions googleSignInOptions = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+        GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
                 .requestEmail()
                 .build();
 
         mGoogleApiClient = new GoogleApiClient.Builder(this)
                 .enableAutoManage(this, this)
-                .addApi(Auth.GOOGLE_SIGN_IN_API, googleSignInOptions)
+                .addApi(Auth.GOOGLE_SIGN_IN_API, gso)
                 .build();
 
-        terms.setOnClickListener(new View.OnClickListener() {
+        create.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(SignupActivity.this, SigninActivity.class);
+                Intent intent = new Intent(SigninActivity.this, SignupActivity.class);
                 startActivity(intent);
             }
         });
@@ -101,7 +96,7 @@ public class SignupActivity extends AppCompatActivity implements GoogleApiClient
                 Toast.makeText(this, account.getDisplayName(), Toast.LENGTH_SHORT).show();
             }
         } else {
-            Toast.makeText(this, "Login Fail", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "Login fail", Toast.LENGTH_SHORT).show();
         }
     }
 

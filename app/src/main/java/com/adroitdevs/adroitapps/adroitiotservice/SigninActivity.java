@@ -18,6 +18,7 @@ import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.StringRequest;
 import com.google.android.gms.auth.api.Auth;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
@@ -50,9 +51,35 @@ public class SigninActivity extends AppCompatActivity implements GoogleApiClient
         setContentView(R.layout.activity_signin);
 
         if (TokenPrefrences.getToken(this) != null) {
-            Intent intent = new Intent(this, MainActivity.class);
-            startActivity(intent);
-            finish();
+            String url = "http://angkatin.arkademy.com/UserAPI/login";
+            JsonObjectRequest request = new JsonObjectRequest(Request.Method.GET, url, null, new Response.Listener<JSONObject>() {
+                @Override
+                public void onResponse(JSONObject response) {
+                    try {
+                        if (response.getBoolean("status")) {
+                            Intent intent = new Intent(getBaseContext(), MainActivity.class);
+                            startActivity(intent);
+                            finish();
+                        }
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }, new Response.ErrorListener() {
+                @Override
+                public void onErrorResponse(VolleyError error) {
+
+                }
+            }) {
+                @Override
+                public Map<String, String> getHeaders() throws AuthFailureError {
+                    Map<String, String> head = new HashMap<>();
+                    head.put("Conten-Type", "application/json");
+                    head.put("KEY", TokenPrefrences.getToken(getBaseContext()));
+                    return head;
+                }
+            };
+            VolleySingleton.getInstance(this).addToRequestQueue(request);
         }
 
         Typeface customFont = Typeface.createFromAsset(getAssets(), "font/Lato-Light.ttf");

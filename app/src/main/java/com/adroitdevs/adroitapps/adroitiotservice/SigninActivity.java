@@ -1,16 +1,24 @@
 package com.adroitdevs.adroitapps.adroitiotservice;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Base64;
 import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.adroitdevs.adroitapps.adroitiotservice.model.TokenPrefrences;
+import com.android.volley.AuthFailureError;
+import com.android.volley.Request;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.StringRequest;
 import com.google.android.gms.auth.api.Auth;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
@@ -19,6 +27,13 @@ import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.SignInButton;
 import com.google.android.gms.common.api.GoogleApiClient;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.UnsupportedEncodingException;
+import java.util.HashMap;
+import java.util.Map;
+
 public class SigninActivity extends AppCompatActivity implements GoogleApiClient.OnConnectionFailedListener {
 
     private static final String TAG = SigninActivity.class.getSimpleName();
@@ -26,6 +41,7 @@ public class SigninActivity extends AppCompatActivity implements GoogleApiClient
     EditText email, pass;
     TextView signin, create, buttonGoogleText;
     SignInButton signInButton;
+    ProgressDialog progressDialog;
     private GoogleApiClient mGoogleApiClient;
 
     @Override
@@ -72,6 +88,69 @@ public class SigninActivity extends AppCompatActivity implements GoogleApiClient
                 signIn();
             }
         });
+
+        signin.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                defaultSignIn();
+            }
+        });
+    }
+
+    private void defaultSignIn() {
+        progressDialog = new ProgressDialog(this);
+        progressDialog.setMessage("Loading");
+        progressDialog.setCanceledOnTouchOutside(false);
+        progressDialog.setCancelable(false);
+        progressDialog.show();
+        String url = "http://angkatin.arkademy.com/LoginAwal";
+        StringRequest request = new StringRequest(Request.Method.POST, url, new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+                try {
+                    JSONObject res = new JSONObject(response);
+                    if (res.getString("status").equals("success")) {
+                        TokenPrefrences.setToken(getBaseContext(), res.getString("token"));
+                        Intent intent = new Intent(getBaseContext(), MainActivity.class);
+                        startActivity(intent);
+                        finish();
+                    } else {
+                        Toast.makeText(getBaseContext(), "Error", Toast.LENGTH_LONG).show();
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+                progressDialog.dismiss();
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Toast.makeText(getBaseContext(), "Error : " + error.getMessage(), Toast.LENGTH_LONG).show();
+                progressDialog.dismiss();
+            }
+        }) {
+            @Override
+            protected Map<String, String> getParams() throws AuthFailureError {
+                String emailText = String.valueOf(email.getText());
+                String passText = String.valueOf(pass.getText());
+                byte[] emailByte = new byte[0];
+                byte[] passByte = new byte[0];
+                try {
+                    emailByte = emailText.getBytes("UTF-8");
+                    passByte = passText.getBytes("UTF-8");
+                } catch (UnsupportedEncodingException e) {
+                    e.printStackTrace();
+                }
+
+                String base64Pass = Base64.encodeToString(passByte, Base64.DEFAULT);
+                String base64Email = Base64.encodeToString(emailByte, Base64.DEFAULT);
+                Map<String, String> body = new HashMap<>();
+                body.put("email", base64Email);
+                body.put("password", base64Pass);
+                return body;
+            }
+        };
+        VolleySingleton.getInstance(this).addToRequestQueue(request);
     }
 
     private void signIn() {
@@ -84,16 +163,64 @@ public class SigninActivity extends AppCompatActivity implements GoogleApiClient
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == RC_SIGN_IN) {
             GoogleSignInResult result = Auth.GoogleSignInApi.getSignInResultFromIntent(data);
-            handleSignInResult(result);
+            try {
+                handleSignInResult(result);
+            } catch (UnsupportedEncodingException e) {
+                e.printStackTrace();
+            }
         }
     }
 
-    private void handleSignInResult(GoogleSignInResult result) {
+    private void handleSignInResult(GoogleSignInResult result) throws UnsupportedEncodingException {
         Log.d(TAG, "handleSignInResult: " + result.isSuccess());
         if (result.isSuccess()) {
             GoogleSignInAccount account = result.getSignInAccount();
             if (account != null) {
-                Toast.makeText(this, account.getDisplayName(), Toast.LENGTH_SHORT).show();
+                progressDialog = new ProgressDialog(this);
+                progressDialog.setCancelable(false);
+                progressDialog.setCanceledOnTouchOutside(false);
+                progressDialog.show();
+                String email = account.getEmail();
+                String nama = account.getDisplayName();
+                byte[] namaByte = nama.getBytes("UTF-8");
+                byte[] emailByte = email.getBytes("UTF-8");
+                final String base64Nama = Base64.encodeToString(namaByte, Base64.DEFAULT);
+                final String base64Email = Base64.encodeToString(emailByte, Base64.DEFAULT);
+                String url = "http://angkatin.arkademy.com/LoginAwal/withGmail";
+                StringRequest request = new StringRequest(Request.Method.POST, url, new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        try {
+                            JSONObject res = new JSONObject(response);
+                            if (res.getString("status").equals("success")) {
+                                TokenPrefrences.setToken(getBaseContext(), res.getString("token"));
+                                Intent intent = new Intent(getBaseContext(), MainActivity.class);
+                                startActivity(intent);
+                                finish();
+                            } else {
+                                Toast.makeText(getBaseContext(), "Error", Toast.LENGTH_LONG).show();
+                            }
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                        progressDialog.dismiss();
+                    }
+                }, new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        Toast.makeText(getBaseContext(), "Error : " + error.getMessage(), Toast.LENGTH_LONG).show();
+                        progressDialog.dismiss();
+                    }
+                }) {
+                    @Override
+                    protected Map<String, String> getParams() throws AuthFailureError {
+                        Map<String, String> body = new HashMap<>();
+                        body.put("name", base64Nama);
+                        body.put("email", base64Email);
+                        return body;
+                    }
+                };
+                VolleySingleton.getInstance(this).addToRequestQueue(request);
             }
         } else {
             Toast.makeText(this, "Login fail", Toast.LENGTH_SHORT).show();

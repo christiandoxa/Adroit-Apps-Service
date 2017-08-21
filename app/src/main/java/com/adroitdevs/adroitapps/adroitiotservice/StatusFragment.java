@@ -2,6 +2,7 @@ package com.adroitdevs.adroitapps.adroitiotservice;
 
 
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -15,6 +16,7 @@ import android.widget.Toast;
 
 import com.adroitdevs.adroitapps.adroitiotservice.adapter.DeviceAdapter;
 import com.adroitdevs.adroitapps.adroitiotservice.model.Device;
+import com.adroitdevs.adroitapps.adroitiotservice.model.TokenPrefrences;
 import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
 import com.android.volley.Response;
@@ -37,6 +39,7 @@ public class StatusFragment extends Fragment implements DeviceAdapter.IDeviceAda
     ArrayList<Device> mList = new ArrayList<>();
     // TODO: Rename and change types of parameters
     ProgressDialog progressDialog;
+    Context context;
 
     public StatusFragment() {
 
@@ -46,7 +49,7 @@ public class StatusFragment extends Fragment implements DeviceAdapter.IDeviceAda
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mListener = (IListener) this.getContext();
-
+        context = this.getContext();
     }
 
     @Override
@@ -103,7 +106,7 @@ public class StatusFragment extends Fragment implements DeviceAdapter.IDeviceAda
             public Map<String, String> getHeaders() throws AuthFailureError {
                 Map<String, String> head = new HashMap<>();
                 head.put("Conten-Type", "application/json");
-                head.put("KEY", "aktVeD9lVzlpWld4QVoyMWhhV3d1WTI5dGJURXpNVGd5TWpObU9HUXpNRGN3T0RJd1pXTTRNell3T0RGa01UQXhOVE5qT0dGa09UVTJaVGc9IWpNUm9IVk1LRldISjVNUEdzTE40");
+                head.put("KEY", TokenPrefrences.getToken(context));
                 return head;
             }
         };
@@ -146,7 +149,7 @@ public class StatusFragment extends Fragment implements DeviceAdapter.IDeviceAda
             public Map<String, String> getHeaders() throws AuthFailureError {
                 Map<String, String> head = new HashMap<>();
                 head.put("Conten-Type", "application/json");
-                head.put("KEY", "aktVeD9lVzlpWld4QVoyMWhhV3d1WTI5dGJURXpNVGd5TWpObU9HUXpNRGN3T0RJd1pXTTRNell3T0RGa01UQXhOVE5qT0dGa09UVTJaVGc9IWpNUm9IVk1LRldISjVNUEdzTE40");
+                head.put("KEY", TokenPrefrences.getToken(context));
                 return head;
             }
         };

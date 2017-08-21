@@ -83,7 +83,7 @@
                 android:paddingLeft="20dp"
                 android:paddingTop="16dp"
                 android:textColor="#fff"
-                android:textColorHint="#ffffff"></EditText>
+                android:textColorHint="#ffffff" />
 
             <EditText
                 android:id="@+id/email"
@@ -101,7 +101,7 @@
                 android:textColor="#fff"
                 android:textColorHint="#ffffff"
 
-                ></EditText>
+                />
 
             <EditText
                 android:id="@+id/pass"
@@ -117,7 +117,7 @@
                 android:paddingLeft="20dp"
                 android:paddingTop="16dp"
                 android:textColor="#fff"
-                android:textColorHint="#ffffff"></EditText>
+                android:textColorHint="#ffffff" />
 
             <EditText
                 android:id="@+id/passconf"
@@ -133,7 +133,7 @@
                 android:paddingLeft="20dp"
                 android:paddingTop="16dp"
                 android:textColor="#fff"
-                android:textColorHint="#ffffff"></EditText>
+                android:textColorHint="#ffffff" />
 
         </LinearLayout>
 

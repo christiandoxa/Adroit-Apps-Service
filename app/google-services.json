@@ -15,6 +15,14 @@
       },
       "oauth_client": [
         {
+          "client_id": "829263859649-djg89b8hbdfr63f714e4878c2v8feev2.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.adroitdevs.adroitapps.adroitiotservice",
+            "certificate_hash": "f729e2b28fd97f4ddf07071b223be56c29698adc"
+          }
+        },
+        {
           "client_id": "829263859649-79h5h6b00ui3er3aqpgqqd9h0q2og08t.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {

@@ -49,6 +49,12 @@ public class SigninActivity extends AppCompatActivity implements GoogleApiClient
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_signin);
 
+        if (TokenPrefrences.getToken(this) != null) {
+            Intent intent = new Intent(this, MainActivity.class);
+            startActivity(intent);
+            finish();
+        }
+
         Typeface customFont = Typeface.createFromAsset(getAssets(), "font/Lato-Light.ttf");
 
         email = (EditText) findViewById(R.id.email);

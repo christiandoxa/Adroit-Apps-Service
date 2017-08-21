@@ -120,7 +120,7 @@ public class SignupActivity extends AppCompatActivity implements GoogleApiClient
         conti.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (name.getText().equals("") || email.getText().equals("") || password.getText().equals("") || (passwordKonf.getText().equals("") && !passwordKonf.getText().equals(password.getText()))) {
+                if (name.getText().toString().trim().isEmpty() || email.getText().toString().trim().isEmpty() || password.getText().toString().trim().isEmpty() || (passwordKonf.getText().toString().trim().isEmpty() && !passwordKonf.getText().toString().equals(password.getText().toString()))) {
                     Toast.makeText(getBaseContext(), "Harus diisi semua!", Toast.LENGTH_LONG).show();
                 } else {
                     signUp();

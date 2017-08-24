@@ -52,8 +52,8 @@ public class HomeFragment extends Fragment implements DeviceAdapter.IDeviceAdapt
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        mListener = (IListener) this.getContext();
         context = this.getContext();
+        mListener = (IListener) context;
     }
 
     @Override
@@ -65,13 +65,13 @@ public class HomeFragment extends Fragment implements DeviceAdapter.IDeviceAdapt
         LinearLayoutManager lm = new LinearLayoutManager(this.getContext());
         rv.setLayoutManager(lm);
         mAdapter = new DeviceAdapter(this, mList);
-        rv.setAdapter(mAdapter);
         fillData();
+        rv.setAdapter(mAdapter);
         return view;
     }
 
     private void fillData() {
-        progressDialog = new ProgressDialog(this.getContext());
+        progressDialog = new ProgressDialog(getContext());
         progressDialog.setMessage("Mengambil data");
         progressDialog.setCancelable(false);
         progressDialog.setCanceledOnTouchOutside(false);
@@ -81,9 +81,8 @@ public class HomeFragment extends Fragment implements DeviceAdapter.IDeviceAdapt
             @Override
             public void onResponse(JSONObject response) {
                 try {
-                    Toast.makeText(getContext(), response.toString(), Toast.LENGTH_LONG).show();
                     JSONObject profile = response.getJSONObject("profile");
-                    mListener.setTextProfile(profile.getString("namaUser"), profile.getString("emailUser"));
+                    mListener.setTextProfile(profile.getString("nama"), profile.getString("email"));
                     JSONArray devices = response.getJSONArray("device");
                     for (int i = 0; i < devices.length(); i++) {
                         JSONObject device = devices.getJSONObject(i);

@@ -181,7 +181,7 @@ public class SignupActivity extends AppCompatActivity implements GoogleApiClient
                 String base64Email = Base64.encodeToString(emailByte, Base64.DEFAULT);
                 String base64Pass = Base64.encodeToString(passByte, Base64.DEFAULT);
                 Map<String, String> body = new HashMap<>();
-                body.put("emailUser", base64Email);
+                body.put("email", base64Email);
                 body.put("name", base64Nama);
                 body.put("password", base64Pass);
                 return body;
@@ -253,7 +253,7 @@ public class SignupActivity extends AppCompatActivity implements GoogleApiClient
                     protected Map<String, String> getParams() throws AuthFailureError {
                         Map<String, String> body = new HashMap<>();
                         body.put("name", base64Nama);
-                        body.put("emailUser", base64Email);
+                        body.put("email", base64Email);
                         return body;
                     }
                 };

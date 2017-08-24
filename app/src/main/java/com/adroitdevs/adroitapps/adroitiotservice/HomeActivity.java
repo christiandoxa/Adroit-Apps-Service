@@ -35,9 +35,6 @@ public class HomeActivity extends AppCompatActivity
             }
         });
 
-        namaUser = (TextView) findViewById(R.id.namaUser);
-        emailUser = (TextView) findViewById(R.id.emailUser);
-
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
@@ -45,9 +42,12 @@ public class HomeActivity extends AppCompatActivity
         toggle.syncState();
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
+        View header = navigationView.getHeaderView(0);
         navigationView.setNavigationItemSelectedListener(this);
         changePage(R.id.nav_camera);
         navigationView.setCheckedItem(R.id.nav_camera);
+        namaUser = (TextView) header.findViewById(R.id.namaUser);
+        emailUser = (TextView) header.findViewById(R.id.emailUser);
     }
 
     @Override

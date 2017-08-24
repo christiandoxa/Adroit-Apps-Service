@@ -5,7 +5,6 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.Switch;
 import android.widget.TextView;
@@ -54,14 +53,10 @@ public class DeviceAdapter extends RecyclerView.Adapter<DeviceAdapter.ViewHolder
     }
 
     public void on(ViewHolder holder) {
-        holder.manual.setEnabled(true);
-        holder.auto.setEnabled(true);
         holder.servoSwitch.setEnabled(true);
     }
 
     public void off(ViewHolder holder) {
-        holder.manual.setEnabled(false);
-        holder.auto.setEnabled(false);
         holder.servoSwitch.setChecked(false);
         holder.servoSwitch.setEnabled(false);
     }
@@ -107,7 +102,7 @@ public class DeviceAdapter extends RecyclerView.Adapter<DeviceAdapter.ViewHolder
                         } else {
                             holder.servoSwitch.setOnCheckedChangeListener(null);
                             off(holder);
-                            holder.statusText.setText("angkat");
+                            holder.statusText.setText("Angkat");
                             holder.servoSwitch.setOnCheckedChangeListener(new servoSwitch(holder, id));
                         }
                     }
@@ -142,7 +137,8 @@ public class DeviceAdapter extends RecyclerView.Adapter<DeviceAdapter.ViewHolder
                     if (!result) {
                         holder.servoSwitch.setChecked(!b);
                     } else {
-                        holder.statusText.setText(servo);
+                        String servText = servo.substring(0, 1).toUpperCase() + servo.substring(1);
+                        holder.statusText.setText(servText);
                     }
                     holder.servoSwitch.setOnCheckedChangeListener(new servoSwitch(holder, id));
                 }
@@ -154,14 +150,13 @@ public class DeviceAdapter extends RecyclerView.Adapter<DeviceAdapter.ViewHolder
     public class ViewHolder extends RecyclerView.ViewHolder {
         TextView tvDevice, cahayaText, hujanText, statusText;
         Switch status, servoSwitch;
-        Button manual, auto;
 
         ViewHolder(View itemView) {
             super(itemView);
             tvDevice = (TextView) itemView.findViewById(R.id.namaDevice);
             cahayaText = (TextView) itemView.findViewById(R.id.Cahaya);
             hujanText = (TextView) itemView.findViewById(R.id.Cuaca);
-            statusText = (TextView) itemView.findViewById(R.id.Status);
+            statusText = (TextView) itemView.findViewById(R.id.statServo);
             status = (Switch) itemView.findViewById(R.id.switchDevice);
             servoSwitch = (Switch) itemView.findViewById(R.id.switchJemur);
         }

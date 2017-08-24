@@ -98,7 +98,8 @@ public class HomeActivity extends AppCompatActivity
             fragment = new HomeFragment();
             setTitle("Beranda");
         } else if (id == R.id.nav_gallery) {
-
+            fragment = new AboutFragment();
+            setTitle("Tentang Adroit Devs");
         } else if (id == R.id.nav_slideshow) {
 
         } else if (id == R.id.nav_manage) {

@@ -29,7 +29,7 @@ public class DeviceAdapter extends RecyclerView.Adapter<DeviceAdapter.ViewHolder
 
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.device_list, parent, false);
+        View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.device_card, parent, false);
         return new ViewHolder(v);
     }
 
@@ -158,41 +158,12 @@ public class DeviceAdapter extends RecyclerView.Adapter<DeviceAdapter.ViewHolder
 
         ViewHolder(View itemView) {
             super(itemView);
-            tvDevice = (TextView) itemView.findViewById(R.id.tvDevice);
-            cahayaText = (TextView) itemView.findViewById(R.id.tvNilaiCahaya);
-            hujanText = (TextView) itemView.findViewById(R.id.tvNilaiHujan);
-            statusText = (TextView) itemView.findViewById(R.id.tvStat);
-            status = (Switch) itemView.findViewById(R.id.switchStatusDevice);
-            servoSwitch = (Switch) itemView.findViewById(R.id.switchAngkat);
-            manual = (Button) itemView.findViewById(R.id.bManual);
-            auto = (Button) itemView.findViewById(R.id.bOtomatis);
-
-            manual.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    mIDeviceAdapter.status("Manual", getAdapterPosition(), new VolleyCallback() {
-                        @Override
-                        public void onSuccess(boolean result) {
-                            if (result) {
-                                servoSwitch.setEnabled(true);
-                            }
-                        }
-                    });
-                }
-            });
-            auto.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    mIDeviceAdapter.status("Otomatis", getAdapterPosition(), new VolleyCallback() {
-                        @Override
-                        public void onSuccess(boolean result) {
-                            if (result) {
-                                servoSwitch.setEnabled(false);
-                            }
-                        }
-                    });
-                }
-            });
+            tvDevice = (TextView) itemView.findViewById(R.id.namaDevice);
+            cahayaText = (TextView) itemView.findViewById(R.id.Cahaya);
+            hujanText = (TextView) itemView.findViewById(R.id.Cuaca);
+            statusText = (TextView) itemView.findViewById(R.id.Status);
+            status = (Switch) itemView.findViewById(R.id.switchDevice);
+            servoSwitch = (Switch) itemView.findViewById(R.id.switchJemur);
         }
     }
 }

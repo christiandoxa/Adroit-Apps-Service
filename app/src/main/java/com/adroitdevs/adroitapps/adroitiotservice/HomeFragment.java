@@ -33,7 +33,11 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
-public class StatusFragment extends Fragment implements DeviceAdapter.IDeviceAdapter {
+
+/**
+ * A simple {@link Fragment} subclass.
+ */
+public class HomeFragment extends Fragment implements DeviceAdapter.IDeviceAdapter {
     IListener mListener;
     DeviceAdapter mAdapter;
     ArrayList<Device> mList = new ArrayList<>();
@@ -41,8 +45,8 @@ public class StatusFragment extends Fragment implements DeviceAdapter.IDeviceAda
     ProgressDialog progressDialog;
     Context context;
 
-    public StatusFragment() {
-
+    public HomeFragment() {
+        // Required empty public constructor
     }
 
     @Override
@@ -56,16 +60,14 @@ public class StatusFragment extends Fragment implements DeviceAdapter.IDeviceAda
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-
-        View view = inflater.inflate(R.layout.fragment_status, container, false);
-        RecyclerView rv = (RecyclerView) view.findViewById(R.id.listDevice);
+        View view = inflater.inflate(R.layout.fragment_home, container, false);
+        RecyclerView rv = (RecyclerView) view.findViewById(R.id.frame);
         LinearLayoutManager lm = new LinearLayoutManager(this.getContext());
         rv.setLayoutManager(lm);
         mAdapter = new DeviceAdapter(this, mList);
         rv.setAdapter(mAdapter);
         fillData();
         return view;
-
     }
 
     private void fillData() {
@@ -79,6 +81,7 @@ public class StatusFragment extends Fragment implements DeviceAdapter.IDeviceAda
             @Override
             public void onResponse(JSONObject response) {
                 try {
+                    Toast.makeText(getContext(), response.toString(), Toast.LENGTH_LONG).show();
                     JSONObject profile = response.getJSONObject("profile");
                     mListener.setTextProfile(profile.getString("namaUser"), profile.getString("emailUser"));
                     JSONArray devices = response.getJSONArray("device");
@@ -159,6 +162,4 @@ public class StatusFragment extends Fragment implements DeviceAdapter.IDeviceAda
     interface IListener {
         void setTextProfile(String nama, String email);
     }
-
-
 }

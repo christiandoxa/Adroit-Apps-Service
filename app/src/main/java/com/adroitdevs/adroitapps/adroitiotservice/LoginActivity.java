@@ -41,7 +41,7 @@ public class LoginActivity extends AppCompatActivity {
 //        pd.setMessage("Authenticating...");
 //        pd.show();
 //
-//        String email = emailText.getText().toString();
+//        String emailUser = emailText.getText().toString();
 //        String pass = passText.getText().toString();
 //
 //        new android.os.Handler().postDelayed(
@@ -81,11 +81,11 @@ public class LoginActivity extends AppCompatActivity {
 
 //    private boolean validate() {
 //        boolean valid = true;
-//        String email = emailText.getText().toString();
+//        String emailUser = emailText.getText().toString();
 //        String pass = passText.getText().toString();
 //
-//        if (email.isEmpty() || !android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
-//            emailText.setError(("Enter a valid email address"));
+//        if (emailUser.isEmpty() || !android.util.Patterns.EMAIL_ADDRESS.matcher(emailUser).matches()) {
+//            emailText.setError(("Enter a valid emailUser address"));
 //            valid = false;
 //        } else {
 //            emailText.setError(null);

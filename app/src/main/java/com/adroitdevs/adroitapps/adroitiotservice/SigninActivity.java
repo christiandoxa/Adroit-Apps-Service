@@ -50,7 +50,7 @@ public class SigninActivity extends AppCompatActivity implements GoogleApiClient
         setContentView(R.layout.activity_signin);
 
         if (TokenPrefrences.getToken(this) != null) {
-            Intent intent = new Intent(this, MainActivity.class);
+            Intent intent = new Intent(this, HomeActivity.class);
             startActivity(intent);
             finish();
         }
@@ -151,7 +151,7 @@ public class SigninActivity extends AppCompatActivity implements GoogleApiClient
                 String base64Pass = Base64.encodeToString(passByte, Base64.DEFAULT);
                 String base64Email = Base64.encodeToString(emailByte, Base64.DEFAULT);
                 Map<String, String> body = new HashMap<>();
-                body.put("email", base64Email);
+                body.put("emailUser", base64Email);
                 body.put("password", base64Pass);
                 return body;
             }
@@ -200,7 +200,7 @@ public class SigninActivity extends AppCompatActivity implements GoogleApiClient
                             JSONObject res = new JSONObject(response);
                             if (res.getString("status").equals("success")) {
                                 TokenPrefrences.setToken(getBaseContext(), res.getString("token"));
-                                Intent intent = new Intent(getBaseContext(), MainActivity.class);
+                                Intent intent = new Intent(getBaseContext(), HomeActivity.class);
                                 startActivity(intent);
                                 finish();
                             } else {
@@ -222,7 +222,7 @@ public class SigninActivity extends AppCompatActivity implements GoogleApiClient
                     protected Map<String, String> getParams() throws AuthFailureError {
                         Map<String, String> body = new HashMap<>();
                         body.put("name", base64Nama);
-                        body.put("email", base64Email);
+                        body.put("emailUser", base64Email);
                         return body;
                     }
                 };

@@ -437,7 +437,6 @@
                     android:orientation="vertical">
 
                     <TextView
-                        android:id="@+id/text"
                         fontPath="font/Lato-Medium.ttf"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -458,11 +457,12 @@
                         android:weightSum="3">
 
                         <TextView
+                            android:id="@+id/textUrl"
                             fontPath="font/Lato-Light.ttf"
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:layout_weight="1.5"
-                            android:text="https://www.adroitdevs.com"
+                            android:text="http://angkatin.arkademy.com/"
                             android:textColor="@color/colorPrimary"
                             android:textSize="14sp"
                             tools:ignore="MissingPrefix" />

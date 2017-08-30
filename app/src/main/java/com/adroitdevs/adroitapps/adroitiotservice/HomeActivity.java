@@ -1,5 +1,6 @@
 package com.adroitdevs.adroitapps.adroitiotservice;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.Fragment;
@@ -12,6 +13,8 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
+
+import com.adroitdevs.adroitapps.adroitiotservice.model.TokenPrefrences;
 
 public class HomeActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener, HomeFragment.IListener {
@@ -96,14 +99,23 @@ public class HomeActivity extends AppCompatActivity
         } else if (id == R.id.nav_share) {
 
         } else if (id == R.id.nav_send) {
-
+            logOut();
         }
 
-        getSupportFragmentManager().beginTransaction()
-                .replace(R.id.container, fragment).commitNow();
+        if (id != R.id.nav_send) {
+            getSupportFragmentManager().beginTransaction()
+                    .replace(R.id.container, fragment).commitNow();
 
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-        drawer.closeDrawer(GravityCompat.START);
+            DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+            drawer.closeDrawer(GravityCompat.START);
+        }
+    }
+
+    public void logOut() {
+        TokenPrefrences.clearToken(this);
+        Intent intent = new Intent(this, SigninActivity.class);
+        startActivity(intent);
+        finish();
     }
 
     @Override

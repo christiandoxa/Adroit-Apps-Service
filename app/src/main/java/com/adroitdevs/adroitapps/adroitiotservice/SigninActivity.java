@@ -109,19 +109,20 @@ public class SigninActivity extends AppCompatActivity implements GoogleApiClient
         progressDialog.setCanceledOnTouchOutside(false);
         progressDialog.setCancelable(false);
         progressDialog.show();
-        String url = "http://angkatin.arkademy.com/LoginAwal";
+        String url = "http://angkatin.arkademy.com:3000/login";
         StringRequest request = new StringRequest(Request.Method.POST, url, new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
                 try {
                     JSONObject res = new JSONObject(response);
-                    if (res.getString("status").equals("success")) {
-                        TokenPrefrences.setToken(getBaseContext(), res.getString("token"));
+                    if (res.getBoolean("status")) {
+                        JSONObject result = res.getJSONObject("result");
+                        TokenPrefrences.setToken(getBaseContext(), result.getString("token"));
                         Intent intent = new Intent(getBaseContext(), HomeActivity.class);
                         startActivity(intent);
                         finish();
                     } else {
-                        Toast.makeText(getBaseContext(), "Error", Toast.LENGTH_LONG).show();
+                        Toast.makeText(getBaseContext(), "Login Fail", Toast.LENGTH_LONG).show();
                     }
                 } catch (JSONException e) {
                     e.printStackTrace();
@@ -131,8 +132,8 @@ public class SigninActivity extends AppCompatActivity implements GoogleApiClient
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-                Toast.makeText(getBaseContext(), "Error : " + error.getMessage(), Toast.LENGTH_LONG).show();
                 progressDialog.dismiss();
+                Toast.makeText(getBaseContext(), "Login Fail", Toast.LENGTH_LONG).show();
             }
         }) {
             @Override
@@ -192,14 +193,14 @@ public class SigninActivity extends AppCompatActivity implements GoogleApiClient
                 byte[] emailByte = email.getBytes("UTF-8");
                 final String base64Nama = Base64.encodeToString(namaByte, Base64.DEFAULT);
                 final String base64Email = Base64.encodeToString(emailByte, Base64.DEFAULT);
-                String url = "http://angkatin.arkademy.com/LoginAwal/withGmail";
+                String url = "http://angkatin.arkademy.com:3000/login/withGmail";
                 StringRequest request = new StringRequest(Request.Method.POST, url, new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
                         try {
                             JSONObject res = new JSONObject(response);
-                            if (res.getString("status").equals("success")) {
-                                TokenPrefrences.setToken(getBaseContext(), res.getString("token"));
+                            if (res.getBoolean("status")) {
+                                TokenPrefrences.setToken(getBaseContext(), res.getString("result"));
                                 Intent intent = new Intent(getBaseContext(), HomeActivity.class);
                                 startActivity(intent);
                                 finish();

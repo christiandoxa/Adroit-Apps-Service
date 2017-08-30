@@ -89,24 +89,30 @@ public class HomeFragment extends Fragment implements DeviceAdapter.IDeviceAdapt
         progressDialog.setCancelable(false);
         progressDialog.setCanceledOnTouchOutside(false);
         progressDialog.show();
-        String url = "http://angkatin.arkademy.com/UserAPI/profile";
+        String url = "http://angkatin.arkademy.com:3000/profile";
         JsonObjectRequest request = new JsonObjectRequest(Request.Method.GET, url, null, new Response.Listener<JSONObject>() {
             @Override
             public void onResponse(JSONObject response) {
                 try {
-                    JSONObject profile = response.getJSONObject("profile");
-                    mListener.setTextProfile(profile.getString("nama"), profile.getString("email"));
-                    JSONArray devices = response.getJSONArray("device");
-                    for (int i = 0; i < devices.length(); i++) {
-                        JSONObject device = devices.getJSONObject(i);
-                        Gson gson = new Gson();
-                        mList.add(gson.fromJson(device.toString(), Device.class));
+                    if (response.getBoolean("status")) {
+                        JSONObject result = response.getJSONObject("result");
+                        JSONObject profile = result.getJSONObject("profile");
+                        mListener.setTextProfile(profile.getString("nama"), profile.getString("email"));
+                        JSONArray devices = result.getJSONArray("devices");
+                        for (int i = 0; i < devices.length(); i++) {
+                            JSONObject device = devices.getJSONObject(i);
+                            Gson gson = new Gson();
+                            mList.add(gson.fromJson(device.toString(), Device.class));
+                        }
+                        mAdapter.notifyDataSetChanged();
+                    } else {
+                        Toast.makeText(getContext(), "Get data error", Toast.LENGTH_LONG).show();
                     }
-                    mAdapter.notifyDataSetChanged();
                     progressDialog.dismiss();
                 } catch (JSONException e) {
                     e.printStackTrace();
                     progressDialog.dismiss();
+                    Toast.makeText(getContext(), "Error : " + e.toString(), Toast.LENGTH_LONG).show();
                 }
             }
         }, new Response.ErrorListener() {
@@ -114,14 +120,14 @@ public class HomeFragment extends Fragment implements DeviceAdapter.IDeviceAdapt
             public void onErrorResponse(VolleyError error) {
                 Log.e("Status", error.toString());
                 progressDialog.dismiss();
-                Toast.makeText(getContext(), "Connection Error", Toast.LENGTH_LONG).show();
+                Toast.makeText(getContext(), "Connection Error : " + error.toString(), Toast.LENGTH_LONG).show();
             }
         }) {
             @Override
             public Map<String, String> getHeaders() throws AuthFailureError {
                 Map<String, String> head = new HashMap<>();
                 head.put("Conten-Type", "application/json");
-                head.put("KEY", TokenPrefrences.getToken(context));
+                head.put("Authorization", "Bearer " + TokenPrefrences.getToken(context));
                 return head;
             }
         };
@@ -130,7 +136,7 @@ public class HomeFragment extends Fragment implements DeviceAdapter.IDeviceAdapt
 
     @Override
     public void status(final String stat, final int id, final VolleyCallback callback) {
-        String url = "http://angkatin.arkademy.com/UserAPI";
+        String url = "http://angkatin.arkademy.com:3000/update";
         final Device device = mList.get(id);
         progressDialog = new ProgressDialog(this.getContext());
         progressDialog.setMessage("Loading...");
@@ -140,16 +146,25 @@ public class HomeFragment extends Fragment implements DeviceAdapter.IDeviceAdapt
         StringRequest request = new StringRequest(Request.Method.PUT, url, new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
-                progressDialog.dismiss();
                 Log.d("ReqStat", response + " " + stat);
-                callback.onSuccess(true);
+                try {
+                    JSONObject res = new JSONObject(response);
+                    if (res.getBoolean("status")) {
+                        callback.onSuccess(true);
+                    } else {
+                        callback.onSuccess(false);
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+                progressDialog.dismiss();
             }
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
+                callback.onSuccess(false);
                 progressDialog.dismiss();
                 Log.d("ReqStat", error.toString() + " " + stat);
-                callback.onSuccess(false);
             }
         }) {
             @Override
@@ -164,7 +179,7 @@ public class HomeFragment extends Fragment implements DeviceAdapter.IDeviceAdapt
             public Map<String, String> getHeaders() throws AuthFailureError {
                 Map<String, String> head = new HashMap<>();
                 head.put("Conten-Type", "application/json");
-                head.put("KEY", TokenPrefrences.getToken(context));
+                head.put("Authorization", "Bearer " + TokenPrefrences.getToken(context));
                 return head;
             }
         };

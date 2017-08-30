@@ -117,7 +117,6 @@
                 android:orientation="horizontal">
 
                 <TextView
-                    android:id="@+id/statServo"
                     fontPath="font/Lato-Medium.ttf"
                     android:layout_width="wrap_content"
                     android:layout_height="20dp"
@@ -136,7 +135,7 @@
                     android:layout_marginLeft="@dimen/activity_horizontal_margin" />
 
                 <TextView
-                    android:id="@+id/Status"
+                    android:id="@+id/statServo"
                     fontPath="font/Lato-Medium.ttf"
                     android:layout_width="wrap_content"
                     android:layout_height="20dp"

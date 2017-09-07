@@ -38,6 +38,7 @@ public class SigninActivity extends AppCompatActivity implements GoogleApiClient
 
     private static final String TAG = SigninActivity.class.getSimpleName();
     private static final int RC_SIGN_IN = 778;
+    private static final String URL = "http://10.103.94.49:3000/";
     EditText email, pass;
     TextView signin, create, buttonGoogleText;
     SignInButton signInButton;
@@ -109,7 +110,7 @@ public class SigninActivity extends AppCompatActivity implements GoogleApiClient
         progressDialog.setCanceledOnTouchOutside(false);
         progressDialog.setCancelable(false);
         progressDialog.show();
-        String url = "http://angkatin.arkademy.com:3000/login";
+        String url = URL + "login";
         StringRequest request = new StringRequest(Request.Method.POST, url, new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
@@ -193,7 +194,7 @@ public class SigninActivity extends AppCompatActivity implements GoogleApiClient
                 byte[] emailByte = email.getBytes("UTF-8");
                 final String base64Nama = Base64.encodeToString(namaByte, Base64.DEFAULT);
                 final String base64Email = Base64.encodeToString(emailByte, Base64.DEFAULT);
-                String url = "http://angkatin.arkademy.com:3000/login/withGmail";
+                String url = URL + "login/withGmail";
                 StringRequest request = new StringRequest(Request.Method.POST, url, new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {

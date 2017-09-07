@@ -114,6 +114,7 @@ public class HomeActivity extends AppCompatActivity
     public void logOut() {
         TokenPrefrences.clearToken(this);
         Intent intent = new Intent(this, SigninActivity.class);
+        intent.putExtra("logout", true);
         startActivity(intent);
         finish();
     }

@@ -26,6 +26,7 @@ import com.google.android.gms.auth.api.signin.GoogleSignInResult;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.SignInButton;
 import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.firebase.iid.FirebaseInstanceId;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -38,7 +39,7 @@ public class SigninActivity extends AppCompatActivity implements GoogleApiClient
 
     private static final String TAG = SigninActivity.class.getSimpleName();
     private static final int RC_SIGN_IN = 778;
-    private static final String URL = "http://10.103.94.49:3000/";
+    private static final String URL = "http://10.103.121.164:3000/";
     EditText email, pass;
     TextView signin, create, buttonGoogleText;
     SignInButton signInButton;
@@ -139,6 +140,7 @@ public class SigninActivity extends AppCompatActivity implements GoogleApiClient
         }) {
             @Override
             protected Map<String, String> getParams() throws AuthFailureError {
+                String regToken = FirebaseInstanceId.getInstance().getToken();
                 String emailText = String.valueOf(email.getText());
                 String passText = String.valueOf(pass.getText());
                 byte[] emailByte = new byte[0];
@@ -155,6 +157,7 @@ public class SigninActivity extends AppCompatActivity implements GoogleApiClient
                 Map<String, String> body = new HashMap<>();
                 body.put("email", base64Email);
                 body.put("password", base64Pass);
+                body.put("regToken", regToken);
                 return body;
             }
         };

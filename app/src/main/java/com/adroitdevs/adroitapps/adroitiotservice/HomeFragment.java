@@ -46,7 +46,7 @@ import java.util.concurrent.TimeUnit;
  * A simple {@link Fragment} subclass.
  */
 public class HomeFragment extends Fragment implements DeviceAdapter.IDeviceAdapter {
-    private static final String URL = "http://10.103.94.49:3000/";
+    private static final String URL = "http://10.103.121.164:3000/";
     IListener mListener;
     DeviceAdapter mAdapter;
     RiwayatAdapter riwayatAdapter;
@@ -146,24 +146,28 @@ public class HomeFragment extends Fragment implements DeviceAdapter.IDeviceAdapt
                         JSONObject result = response.getJSONObject("result");
                         JSONObject profile = result.getJSONObject("profile");
                         mListener.setTextProfile(profile.getString("nama"), profile.getString("email"));
-                        JSONArray devices = result.getJSONArray("devices");
-                        JSONArray riwayats = result.getJSONArray("riwayat");
-                        for (int i = 0; i < devices.length(); i++) {
-                            JSONObject device = devices.getJSONObject(i);
-                            mList.add(gson.fromJson(device.toString(), Device.class));
-                        }
-                        mAdapter.notifyDataSetChanged();
-                        for (int j = 0; j < riwayats.length(); j++) {
-                            JSONObject riwayat = riwayats.getJSONObject(j);
-                            listJemur.add(gson.fromJson(riwayat.toString(), RiwayatJemur.class));
-                            if (j == 0 && (riwayat.getString("status").equals("belum kering"))) {
-                                int hours = (int) TimeUnit.SECONDS.toHours(Integer.parseInt(riwayat.getString("estimasi_waktu")));
-                                int minutes = (int) TimeUnit.SECONDS.toMinutes(Integer.parseInt(riwayat.getString("estimasi_waktu"))) - (hours * 60);
-                                hour.setText(String.valueOf(hours));
-                                minute.setText(String.valueOf(minutes));
+                        if (!result.isNull("devices")) {
+                            JSONArray devices = result.getJSONArray("devices");
+                            for (int i = 0; i < devices.length(); i++) {
+                                JSONObject device = devices.getJSONObject(i);
+                                mList.add(gson.fromJson(device.toString(), Device.class));
+                                mAdapter.notifyDataSetChanged();
                             }
                         }
-                        riwayatAdapter.notifyDataSetChanged();
+                        if (!result.isNull("riwayat")) {
+                            JSONArray riwayats = result.getJSONArray("riwayat");
+                            for (int j = 0; j < riwayats.length(); j++) {
+                                JSONObject riwayat = riwayats.getJSONObject(j);
+                                listJemur.add(gson.fromJson(riwayat.toString(), RiwayatJemur.class));
+                                if (j == 0 && (riwayat.getString("status").equals("belum kering"))) {
+                                    int hours = (int) TimeUnit.SECONDS.toHours(Integer.parseInt(riwayat.getString("estimasi_waktu")));
+                                    int minutes = (int) TimeUnit.SECONDS.toMinutes(Integer.parseInt(riwayat.getString("estimasi_waktu"))) - (hours * 60);
+                                    hour.setText(String.valueOf(hours));
+                                    minute.setText(String.valueOf(minutes));
+                                }
+                            }
+                            riwayatAdapter.notifyDataSetChanged();
+                        }
                     } else {
                         Toast.makeText(getContext(), "Get data error", Toast.LENGTH_LONG).show();
                     }

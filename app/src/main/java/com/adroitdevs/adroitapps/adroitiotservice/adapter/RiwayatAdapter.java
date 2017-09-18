@@ -11,7 +11,11 @@ import android.widget.TextView;
 import com.adroitdevs.adroitapps.adroitiotservice.R;
 import com.adroitdevs.adroitapps.adroitiotservice.model.RiwayatJemur;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
+import java.util.Locale;
 import java.util.concurrent.TimeUnit;
 
 /**
@@ -22,6 +26,8 @@ public class RiwayatAdapter extends RecyclerView.Adapter<RiwayatAdapter.ViewHold
     ArrayList<RiwayatJemur> listRiwayat = new ArrayList<>();
     RiwayatJemur riwayatJemur;
     Fragment contextFrag;
+    SimpleDateFormat formatOld = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'", Locale.getDefault());
+    SimpleDateFormat formatNew = new SimpleDateFormat("EEEE dd MMM yyyy", Locale.getDefault());
 
     public RiwayatAdapter(Fragment contextFrag, ArrayList<RiwayatJemur> listRiwayat) {
         this.listRiwayat = listRiwayat;
@@ -37,10 +43,17 @@ public class RiwayatAdapter extends RecyclerView.Adapter<RiwayatAdapter.ViewHold
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
         riwayatJemur = listRiwayat.get(position);
+        String newDate = "";
         int time = Integer.parseInt(String.valueOf(TimeUnit.SECONDS.toMinutes(Integer.parseInt(riwayatJemur.estimasi_waktu))));
         holder.waktu.setText(String.valueOf(time) + " menit");
         holder.stat.setText(riwayatJemur.status);
-        holder.tgl.setText(riwayatJemur.tanggal_jemur);
+        try {
+            Date date = formatOld.parse(riwayatJemur.tanggal_jemur);
+            newDate = formatNew.format(date);
+        } catch (ParseException e) {
+            newDate = e.toString();
+        }
+        holder.tgl.setText(newDate);
         if (!riwayatJemur.status.equals("belum kering")) {
             holder.side.setBackgroundColor(ContextCompat.getColor(contextFrag.getContext(), R.color.colorPrimary));
             holder.circ.setBackgroundResource(R.drawable.gree_circle);

@@ -2,8 +2,10 @@ package com.adroitdevs.adroitapps.adroitiotservice;
 
 
 import android.app.ProgressDialog;
+import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
@@ -24,12 +26,18 @@ import com.adroitdevs.adroitapps.adroitiotservice.adapter.RiwayatAdapter;
 import com.adroitdevs.adroitapps.adroitiotservice.model.Device;
 import com.adroitdevs.adroitapps.adroitiotservice.model.RiwayatJemur;
 import com.adroitdevs.adroitapps.adroitiotservice.model.TokenPrefrences;
+import com.adroitdevs.adroitapps.adroitiotservice.service.MyJobService;
 import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.StringRequest;
+import com.firebase.jobdispatcher.FirebaseJobDispatcher;
+import com.firebase.jobdispatcher.GooglePlayDriver;
+import com.firebase.jobdispatcher.Job;
+import com.firebase.jobdispatcher.Lifetime;
+import com.firebase.jobdispatcher.Trigger;
 import com.google.gson.Gson;
 
 import org.json.JSONArray;
@@ -39,14 +47,13 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.concurrent.TimeUnit;
 
 
 /**
  * A simple {@link Fragment} subclass.
  */
 public class HomeFragment extends Fragment implements DeviceAdapter.IDeviceAdapter {
-    private static final String URL = "http://10.103.121.164:3000/";
+    private static final String URL = "http://10.103.102.61:3000/";
     IListener mListener;
     DeviceAdapter mAdapter;
     RiwayatAdapter riwayatAdapter;
@@ -58,6 +65,13 @@ public class HomeFragment extends Fragment implements DeviceAdapter.IDeviceAdapt
     TextView listTitle, jemuranList, deviceList, hour, minute;
     RecyclerView rv;
     Gson gson = new Gson();
+    FirebaseJobDispatcher dispatcher;
+    private BroadcastReceiver br = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            updateTimer(intent);
+        }
+    };
 
     public HomeFragment() {
         // Required empty public constructor
@@ -128,7 +142,48 @@ public class HomeFragment extends Fragment implements DeviceAdapter.IDeviceAdapt
                 listTitle.setText("Devices");
             }
         });
+        dispatcher = new FirebaseJobDispatcher(new GooglePlayDriver(context));
+
+        Job myJob = dispatcher.newJobBuilder()
+                .setService(MyJobService.class)
+                .setTag("JobService")
+                .setLifetime(Lifetime.UNTIL_NEXT_BOOT)
+                .setTrigger(Trigger.executionWindow(0, 0))
+                .build();
+
+        dispatcher.mustSchedule(myJob);
         return view;
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        this.getActivity().registerReceiver(br, new IntentFilter(MyJobService.COUNTDOWN_BR));
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        this.getActivity().unregisterReceiver(br);
+    }
+
+    @Override
+    public void onStop() {
+        try {
+            this.getActivity().unregisterReceiver(br);
+        } catch (Exception ex) {
+
+        }
+        super.onStop();
+    }
+
+    private void updateTimer(Intent intent) {
+        if (intent.getExtras() != null) {
+            int hours = intent.getIntExtra("hours", 0);
+            int minutes = intent.getIntExtra("minutes", 0);
+            hour.setText(String.valueOf(hours));
+            minute.setText(String.valueOf(minutes));
+        }
     }
 
     private void fillData() {
@@ -159,12 +214,6 @@ public class HomeFragment extends Fragment implements DeviceAdapter.IDeviceAdapt
                             for (int j = 0; j < riwayats.length(); j++) {
                                 JSONObject riwayat = riwayats.getJSONObject(j);
                                 listJemur.add(gson.fromJson(riwayat.toString(), RiwayatJemur.class));
-                                if (j == 0 && (riwayat.getString("status").equals("belum kering"))) {
-                                    int hours = (int) TimeUnit.SECONDS.toHours(Integer.parseInt(riwayat.getString("estimasi_waktu")));
-                                    int minutes = (int) TimeUnit.SECONDS.toMinutes(Integer.parseInt(riwayat.getString("estimasi_waktu"))) - (hours * 60);
-                                    hour.setText(String.valueOf(hours));
-                                    minute.setText(String.valueOf(minutes));
-                                }
                             }
                             riwayatAdapter.notifyDataSetChanged();
                         }
@@ -182,12 +231,17 @@ public class HomeFragment extends Fragment implements DeviceAdapter.IDeviceAdapt
             @Override
             public void onErrorResponse(VolleyError error) {
                 Log.e("Status", error.toString());
-                if (error.networkResponse.statusCode == 401) {
-                    TokenPrefrences.clearToken(getContext());
-                    Intent intent = new Intent(getActivity(), SigninActivity.class);
-                    progressDialog.dismiss();
-                    startActivity(intent);
-                    getActivity().finish();
+                if (!error.toString().equals("com.android.volley.TimeoutError")) {
+                    if (error.networkResponse.statusCode == 401) {
+                        TokenPrefrences.clearToken(getContext());
+                        Intent intent = new Intent(getActivity(), SigninActivity.class);
+                        progressDialog.dismiss();
+                        startActivity(intent);
+                        getActivity().finish();
+                    } else {
+                        progressDialog.dismiss();
+                        Toast.makeText(getContext(), "Connection Error : " + error.toString(), Toast.LENGTH_LONG).show();
+                    }
                 } else {
                     progressDialog.dismiss();
                     Toast.makeText(getContext(), "Connection Error : " + error.toString(), Toast.LENGTH_LONG).show();

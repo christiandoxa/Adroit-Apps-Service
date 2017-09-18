@@ -32,6 +32,7 @@ dependencies {
     compile 'com.google.firebase:firebase-core:11.2.2'
     compile 'com.google.firebase:firebase-auth:11.2.2'
     compile 'com.google.firebase:firebase-messaging:11.2.2'
+    compile 'com.firebase:firebase-jobdispatcher:0.8.1'
     compile 'com.google.android.gms:play-services-auth:11.2.2'
     compile 'com.jakewharton:butterknife:6.1.0'
     compile 'com.android.support:support-v4:25.3.1'

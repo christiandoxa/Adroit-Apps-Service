@@ -39,7 +39,7 @@ public class SigninActivity extends AppCompatActivity implements GoogleApiClient
 
     private static final String TAG = SigninActivity.class.getSimpleName();
     private static final int RC_SIGN_IN = 778;
-    private static final String URL = "http://10.103.121.164:3000/";
+    private static final String URL = "http://10.103.102.61:3000/";
     EditText email, pass;
     TextView signin, create, buttonGoogleText;
     SignInButton signInButton;
@@ -225,9 +225,11 @@ public class SigninActivity extends AppCompatActivity implements GoogleApiClient
                 }) {
                     @Override
                     protected Map<String, String> getParams() throws AuthFailureError {
+                        String regToken = FirebaseInstanceId.getInstance().getToken();
                         Map<String, String> body = new HashMap<>();
                         body.put("name", base64Nama);
                         body.put("email", base64Email);
+                        body.put("regToken", regToken);
                         return body;
                     }
                 };

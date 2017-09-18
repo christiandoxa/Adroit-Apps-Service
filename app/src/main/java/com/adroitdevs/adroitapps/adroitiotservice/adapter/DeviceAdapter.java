@@ -13,6 +13,8 @@ import com.adroitdevs.adroitapps.adroitiotservice.R;
 import com.adroitdevs.adroitapps.adroitiotservice.VolleyCallback;
 import com.adroitdevs.adroitapps.adroitiotservice.model.Device;
 
+import org.json.JSONObject;
+
 import java.util.ArrayList;
 
 public class DeviceAdapter extends RecyclerView.Adapter<DeviceAdapter.ViewHolder> {
@@ -105,6 +107,11 @@ public class DeviceAdapter extends RecyclerView.Adapter<DeviceAdapter.ViewHolder
                     }
                     holder.autoSwitch.setOnCheckedChangeListener(new AutoSwitch(holder, id));
                 }
+
+                @Override
+                public void onSuccessJsonObject(JSONObject result) {
+
+                }
             });
         }
     }
@@ -147,6 +154,11 @@ public class DeviceAdapter extends RecyclerView.Adapter<DeviceAdapter.ViewHolder
                     }
                     holder.status.setOnCheckedChangeListener(new StatSwitch(holder, id));
                 }
+
+                @Override
+                public void onSuccessJsonObject(JSONObject result) {
+
+                }
             });
         }
     }
@@ -180,6 +192,11 @@ public class DeviceAdapter extends RecyclerView.Adapter<DeviceAdapter.ViewHolder
                         holder.statusText.setText("Kondisi: " + servText);
                     }
                     holder.servoSwitch.setOnCheckedChangeListener(new servoSwitch(holder, id));
+                }
+
+                @Override
+                public void onSuccessJsonObject(JSONObject result) {
+
                 }
             });
         }

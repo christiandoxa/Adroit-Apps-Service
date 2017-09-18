@@ -66,6 +66,7 @@ public class HomeFragment extends Fragment implements DeviceAdapter.IDeviceAdapt
     RecyclerView rv;
     Gson gson = new Gson();
     FirebaseJobDispatcher dispatcher;
+    Job myJob;
     private BroadcastReceiver br = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
@@ -144,11 +145,13 @@ public class HomeFragment extends Fragment implements DeviceAdapter.IDeviceAdapt
         });
         dispatcher = new FirebaseJobDispatcher(new GooglePlayDriver(context));
 
-        Job myJob = dispatcher.newJobBuilder()
+        myJob = dispatcher.newJobBuilder()
                 .setService(MyJobService.class)
+                .setRecurring(true)
                 .setTag("JobService")
                 .setLifetime(Lifetime.UNTIL_NEXT_BOOT)
                 .setTrigger(Trigger.executionWindow(0, 0))
+                .setReplaceCurrent(false)
                 .build();
 
         dispatcher.mustSchedule(myJob);
@@ -271,24 +274,24 @@ public class HomeFragment extends Fragment implements DeviceAdapter.IDeviceAdapt
         StringRequest request = new StringRequest(Request.Method.PUT, url, new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
-                Log.d("ReqStat", response + " " + stat);
-                try {
-                    JSONObject res = new JSONObject(response);
-                    if (res.getBoolean("status")) {
-                        callback.onSuccess(true);
-                    } else {
-                        callback.onSuccess(false);
-                    }
-                } catch (JSONException e) {
-                    e.printStackTrace();
+                if(stat.equals("angkat") || stat.equals("Manual")){
+                    dispatcher.cancelAll();
+                    Log.d("ReqStat","Canceling Job");
+                    getActivity().unregisterReceiver(br);
+                    hour.setText("0");
+                    minute.setText("0");
+                }else{
+                    Log.d("ReqStat","Start Job");
+                    getActivity().registerReceiver(br, new IntentFilter(MyJobService.COUNTDOWN_BR));
+                    dispatcher.mustSchedule(myJob);
                 }
+                callback.onSuccess(true);
                 progressDialog.dismiss();
             }
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
                 callback.onSuccess(false);
-
                 progressDialog.dismiss();
                 Log.d("ReqStat", error.toString() + " " + stat);
             }

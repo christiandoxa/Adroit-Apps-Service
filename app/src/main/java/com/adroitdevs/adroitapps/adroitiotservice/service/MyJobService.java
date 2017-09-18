@@ -39,6 +39,7 @@ public class MyJobService extends JobService {
     Date currentTime = Calendar.getInstance().getTime();
     SimpleDateFormat formatOld = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'", Locale.getDefault());
     Intent bi = new Intent(COUNTDOWN_BR);
+    CountDownTimer cdt;
 
     @Override
     public boolean onStartJob(JobParameters job) {
@@ -57,7 +58,7 @@ public class MyJobService extends JobService {
                     final String id = result.getString("id_jemuran");
                     long seconds = (resultDate.getTime() - currentTime.getTime());
                     int dateInSeconds = Integer.parseInt(String.valueOf(seconds));
-                    new CountDownTimer(dateInSeconds, 1000) {
+                     cdt = new CountDownTimer(dateInSeconds, 1000) {
                         @Override
                         public void onTick(long millisUntilFinished) {
                             int hours = (int) TimeUnit.SECONDS.toHours(millisUntilFinished / 1000);
@@ -72,7 +73,8 @@ public class MyJobService extends JobService {
                             updateStatus(id);
                             jobFinished(jp, false);
                         }
-                    }.start();
+                    };
+                    cdt.start();
                 } catch (ParseException e) {
                     e.printStackTrace();
                 } catch (JSONException e) {
@@ -154,7 +156,7 @@ public class MyJobService extends JobService {
 
     @Override
     public boolean onStopJob(JobParameters job) {
-
+        cdt.cancel();
         return false;
     }
 }

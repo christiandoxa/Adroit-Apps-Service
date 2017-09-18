@@ -141,7 +141,7 @@ public class HomeActivity extends AppCompatActivity
     }
 
     private void logOutWeb(final VolleyCallback callback) {
-        String url = "http://192.168.88.59:3000/logout";
+        String url = "http://10.103.102.61:3000/logout";
         StringRequest request = new StringRequest(url, new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {

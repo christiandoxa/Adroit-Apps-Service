@@ -93,6 +93,7 @@ public class DeviceAdapter extends RecyclerView.Adapter<DeviceAdapter.ViewHolder
         @Override
         public void onCheckedChanged(CompoundButton compoundButton, final boolean b) {
             holder.autoSwitch.setOnCheckedChangeListener(null);
+            holder.servoSwitch.setOnCheckedChangeListener(null);
             if (b) {
                 auto = "Otomatis";
             } else {
@@ -104,7 +105,13 @@ public class DeviceAdapter extends RecyclerView.Adapter<DeviceAdapter.ViewHolder
                 public void onSuccess(boolean result) {
                     if (!result) {
                         holder.autoSwitch.setChecked(!b);
+                    }else{
+                        holder.servoSwitch.setEnabled(!b);
+                        if(auto.equals("Otomatis") && holder.servoSwitch.isChecked()){
+                            holder.servoSwitch.setChecked(false);
+                        }
                     }
+                    holder.servoSwitch.setOnCheckedChangeListener(new servoSwitch(holder,id));
                     holder.autoSwitch.setOnCheckedChangeListener(new AutoSwitch(holder, id));
                 }
 

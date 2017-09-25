@@ -18,6 +18,13 @@ public class TokenPrefrences {
         editor.commit();
     }
 
+    protected static void clearPrefString(Context context) {
+        SharedPreferences prefs = context.getSharedPreferences(MY_PREFS, Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = prefs.edit();
+        editor.clear();
+        editor.commit();
+    }
+
     protected static String getPrefString(Context context, String key) {
         SharedPreferences prefs = context.getSharedPreferences(MY_PREFS, Context.MODE_PRIVATE);
         return prefs.getString(key, null);
@@ -31,4 +38,7 @@ public class TokenPrefrences {
         return getPrefString(context, TOKEN);
     }
 
+    public static void clearToken(Context context) {
+        clearPrefString(context);
+    }
 }

@@ -27,6 +27,7 @@ import com.google.android.gms.auth.api.signin.GoogleSignInResult;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.SignInButton;
 import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.firebase.iid.FirebaseInstanceId;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -39,6 +40,7 @@ public class SigninActivity extends AppCompatActivity implements GoogleApiClient
 
     private static final String TAG = SigninActivity.class.getSimpleName();
     private static final int RC_SIGN_IN = 778;
+    private static final String URL = "http://192.168.88.59:3000/";
     EditText email, pass;
     TextView signin, create, buttonGoogleText;
     SignInButton signInButton;
@@ -136,19 +138,20 @@ public class SigninActivity extends AppCompatActivity implements GoogleApiClient
         progressDialog.setCanceledOnTouchOutside(false);
         progressDialog.setCancelable(false);
         progressDialog.show();
-        String url = "http://angkatin.arkademy.com/LoginAwal";
+        String url = URL + "login";
         StringRequest request = new StringRequest(Request.Method.POST, url, new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
                 try {
                     JSONObject res = new JSONObject(response);
-                    if (res.getString("status").equals("success")) {
-                        TokenPrefrences.setToken(getBaseContext(), res.getString("token"));
-                        Intent intent = new Intent(getBaseContext(), MainActivity.class);
+                    if (res.getBoolean("status")) {
+                        JSONObject result = res.getJSONObject("result");
+                        TokenPrefrences.setToken(getBaseContext(), result.getString("token"));
+                        Intent intent = new Intent(getBaseContext(), HomeActivity.class);
                         startActivity(intent);
                         finish();
                     } else {
-                        Toast.makeText(getBaseContext(), "Error", Toast.LENGTH_LONG).show();
+                        Toast.makeText(getBaseContext(), "Login Fail", Toast.LENGTH_LONG).show();
                     }
                 } catch (JSONException e) {
                     e.printStackTrace();
@@ -158,12 +161,13 @@ public class SigninActivity extends AppCompatActivity implements GoogleApiClient
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-                Toast.makeText(getBaseContext(), "Error : " + error.getMessage(), Toast.LENGTH_LONG).show();
                 progressDialog.dismiss();
+                Toast.makeText(getBaseContext(), "Login Fail", Toast.LENGTH_LONG).show();
             }
         }) {
             @Override
             protected Map<String, String> getParams() throws AuthFailureError {
+                String regToken = FirebaseInstanceId.getInstance().getToken();
                 String emailText = String.valueOf(email.getText());
                 String passText = String.valueOf(pass.getText());
                 byte[] emailByte = new byte[0];
@@ -180,6 +184,7 @@ public class SigninActivity extends AppCompatActivity implements GoogleApiClient
                 Map<String, String> body = new HashMap<>();
                 body.put("email", base64Email);
                 body.put("password", base64Pass);
+                body.put("regToken", regToken);
                 return body;
             }
         };
@@ -219,15 +224,15 @@ public class SigninActivity extends AppCompatActivity implements GoogleApiClient
                 byte[] emailByte = email.getBytes("UTF-8");
                 final String base64Nama = Base64.encodeToString(namaByte, Base64.DEFAULT);
                 final String base64Email = Base64.encodeToString(emailByte, Base64.DEFAULT);
-                String url = "http://angkatin.arkademy.com/LoginAwal/withGmail";
+                String url = URL + "login/withGmail";
                 StringRequest request = new StringRequest(Request.Method.POST, url, new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
                         try {
                             JSONObject res = new JSONObject(response);
-                            if (res.getString("status").equals("success")) {
-                                TokenPrefrences.setToken(getBaseContext(), res.getString("token"));
-                                Intent intent = new Intent(getBaseContext(), MainActivity.class);
+                            if (res.getBoolean("status")) {
+                                TokenPrefrences.setToken(getBaseContext(), res.getString("result"));
+                                Intent intent = new Intent(getBaseContext(), HomeActivity.class);
                                 startActivity(intent);
                                 finish();
                             } else {
@@ -247,9 +252,11 @@ public class SigninActivity extends AppCompatActivity implements GoogleApiClient
                 }) {
                     @Override
                     protected Map<String, String> getParams() throws AuthFailureError {
+                        String regToken = FirebaseInstanceId.getInstance().getToken();
                         Map<String, String> body = new HashMap<>();
                         body.put("name", base64Nama);
                         body.put("email", base64Email);
+                        body.put("regToken", regToken);
                         return body;
                     }
                 };

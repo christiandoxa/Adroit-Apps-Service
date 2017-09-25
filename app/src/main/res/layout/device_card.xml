@@ -1,0 +1,205 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:card_view="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginTop="15dp"
+    card_view:cardCornerRadius="2dp"
+    card_view:cardElevation="4dp">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/cardview_bg"
+        android:orientation="horizontal">
+
+        <View
+            android:layout_width="5dp"
+            android:layout_height="match_parent"
+            android:background="@color/colorPrimary">
+
+        </View>
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="7dp"
+            android:layout_marginTop="7dp">
+
+            <TextView
+                android:id="@+id/namaDevice"
+                fontPath="font/Lato-Medium.ttf"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignBottom="@+id/linearswitch"
+                android:layout_marginLeft="20dp"
+                android:gravity="center_vertical"
+                android:text="Nama Device"
+                android:textColor="@color/colorGray"
+                android:textSize="20dp"
+                android:textStyle="bold"
+                tools:ignore="MissingPrefix" />
+
+            <LinearLayout
+                android:id="@+id/linearswitch"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:layout_marginRight="20dp"
+                android:gravity="center_vertical">
+
+                <Switch
+                    android:id="@+id/switchDevice"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/linearsensor"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/linearswitch"
+                android:layout_marginTop="2dp"
+                android:orientation="horizontal">
+
+                <TextView
+                    fontPath="font/Lato-Medium.ttf"
+                    android:layout_width="wrap_content"
+                    android:layout_height="20dp"
+                    android:layout_marginLeft="20dp"
+                    android:gravity="center"
+                    android:text="Otomatis"
+                    android:textColor="@color/colorGray"
+                    android:textSize="14sp"
+                    android:textStyle="bold"
+                    tools:ignore="MissingPrefix" />
+
+                <Switch
+                    android:id="@+id/switchOtomatis"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="@dimen/activity_horizontal_margin" />
+
+                <TextView
+                    fontPath="font/Lato-Medium.ttf"
+                    android:layout_width="wrap_content"
+                    android:layout_height="20dp"
+                    android:layout_marginLeft="20dp"
+                    android:gravity="center"
+                    android:text="Terang: Satu kali"
+                    android:textColor="@color/colorGray"
+                    android:textSize="12sp"
+                    android:textStyle="bold"
+                    tools:ignore="MissingPrefix" />
+
+                <TextView
+                    fontPath="font/Lato-Medium.ttf"
+                    android:layout_width="wrap_content"
+                    android:layout_height="20dp"
+                    android:layout_marginLeft="20dp"
+                    android:gravity="center"
+                    android:text="Hujan: Satu kali"
+                    android:textColor="@color/colorGray"
+                    android:textSize="12sp"
+                    android:textStyle="bold"
+                    tools:ignore="MissingPrefix" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/linearjemur"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/linearsensor"
+                android:layout_marginTop="2dp"
+                android:orientation="horizontal">
+
+                <TextView
+                    fontPath="font/Lato-Medium.ttf"
+                    android:layout_width="wrap_content"
+                    android:layout_height="20dp"
+                    android:layout_marginLeft="20dp"
+                    android:gravity="center"
+                    android:text="Jemur     "
+                    android:textColor="@color/colorGray"
+                    android:textSize="14sp"
+                    android:textStyle="bold"
+                    tools:ignore="MissingPrefix" />
+
+                <Switch
+                    android:id="@+id/switchJemur"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="@dimen/activity_horizontal_margin" />
+
+                <TextView
+                    android:id="@+id/statServo"
+                    fontPath="font/Lato-Medium.ttf"
+                    android:layout_width="wrap_content"
+                    android:layout_height="20dp"
+                    android:layout_marginLeft="20dp"
+                    android:gravity="center"
+                    android:text="Kondisi: Menjemur"
+                    android:textColor="@color/colorGray"
+                    android:textSize="12sp"
+                    android:textStyle="bold"
+                    tools:ignore="MissingPrefix" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/linearjemur"
+                android:layout_marginBottom="5dp"
+                android:layout_marginTop="5dp"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/Cuaca"
+                    fontPath="font/Lato-Medium.ttf"
+                    android:layout_width="wrap_content"
+                    android:layout_height="20dp"
+                    android:layout_marginLeft="20dp"
+                    android:background="@drawable/roun_rect_lightgray"
+                    android:gravity="center"
+                    android:text="Cuaca: Hujan"
+                    android:textColor="@color/colorGray"
+                    android:textSize="10sp"
+                    android:textStyle="bold"
+                    tools:ignore="MissingPrefix" />
+
+                <TextView
+                    android:id="@+id/Cahaya"
+                    fontPath="font/Lato-Medium.ttf"
+                    android:layout_width="wrap_content"
+                    android:layout_height="20dp"
+                    android:layout_marginLeft="10dp"
+                    android:background="@drawable/roun_rect_lightgray"
+                    android:gravity="center"
+                    android:text="Cahaya: Terang"
+                    android:textColor="@color/colorGray"
+                    android:textSize="10sp"
+                    android:textStyle="bold"
+                    tools:ignore="MissingPrefix" />
+
+                <TextView
+                    android:id="@+id/Kelembaban"
+                    fontPath="font/Lato-Medium.ttf"
+                    android:layout_width="wrap_content"
+                    android:layout_height="20dp"
+                    android:layout_marginLeft="10dp"
+                    android:background="@drawable/roun_rect_lightgray"
+                    android:gravity="center"
+                    android:text="Kelembaban: Lembab"
+                    android:textColor="@color/colorGray"
+                    android:textSize="10sp"
+                    android:textStyle="bold"
+                    tools:ignore="MissingPrefix" />
+
+            </LinearLayout>
+        </RelativeLayout>
+    </LinearLayout>
+</android.support.v7.widget.CardView>

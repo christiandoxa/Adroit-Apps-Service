@@ -80,7 +80,7 @@ public class StatusFragment extends Fragment implements DeviceAdapter.IDeviceAda
             public void onResponse(JSONObject response) {
                 try {
                     JSONObject profile = response.getJSONObject("profile");
-                    mListener.setTextProfile(profile.getString("nama"), profile.getString("email"));
+                    mListener.setTextProfile(profile.getString("namaUser"), profile.getString("emailUser"));
                     JSONArray devices = response.getJSONArray("device");
                     for (int i = 0; i < devices.length(); i++) {
                         JSONObject device = devices.getJSONObject(i);

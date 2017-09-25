@@ -232,7 +232,7 @@ public class SignupActivity extends AppCompatActivity implements GoogleApiClient
                             JSONObject res = new JSONObject(response);
                             if (res.getString("status").equals("success")) {
                                 TokenPrefrences.setToken(getBaseContext(), res.getString("token"));
-                                Intent intent = new Intent(getBaseContext(), MainActivity.class);
+                                Intent intent = new Intent(getBaseContext(), HomeActivity.class);
                                 startActivity(intent);
                                 finish();
                             } else {

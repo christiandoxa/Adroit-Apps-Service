@@ -2,6 +2,7 @@ package com.adroitdevs.adroitapps.adroitiotservice.adapter;
 
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -40,6 +41,7 @@ public class DeviceAdapter extends RecyclerView.Adapter<DeviceAdapter.ViewHolder
         holder.tvDevice.setText(device.device_id);
         holder.cahayaText.setText(device.cahaya + " cd");
         holder.hujanText.setText(device.hujan + " mm");
+        holder.lembabText.setText(device.lembab + "%");
         holder.statusText.setText("Kondisi: " + device.servo);
         holder.status.setChecked(device.status.equals("On"));
         if (device.status.equals("On")) {
@@ -107,9 +109,11 @@ public class DeviceAdapter extends RecyclerView.Adapter<DeviceAdapter.ViewHolder
                         holder.autoSwitch.setChecked(!b);
                     }else{
                         holder.servoSwitch.setEnabled(!b);
+                        deviceList.get(id).changeAuto(auto);
                         if(auto.equals("Otomatis") && holder.servoSwitch.isChecked()){
                             holder.servoSwitch.setChecked(false);
                         }
+                        notifyDataSetChanged();
                     }
                     holder.servoSwitch.setOnCheckedChangeListener(new servoSwitch(holder,id));
                     holder.autoSwitch.setOnCheckedChangeListener(new AutoSwitch(holder, id));
@@ -137,6 +141,8 @@ public class DeviceAdapter extends RecyclerView.Adapter<DeviceAdapter.ViewHolder
         @Override
         public void onCheckedChanged(CompoundButton compoundButton, final boolean b) {
             holder.status.setOnCheckedChangeListener(null);
+            holder.servoSwitch.setOnCheckedChangeListener(null);
+            holder.autoSwitch.setOnCheckedChangeListener(null);
             if (b) {
                 stat = "On";
             } else {
@@ -151,14 +157,14 @@ public class DeviceAdapter extends RecyclerView.Adapter<DeviceAdapter.ViewHolder
                         if (stat.equals("On")) {
                             on(holder);
                         } else {
-                            holder.servoSwitch.setOnCheckedChangeListener(null);
-                            holder.autoSwitch.setOnCheckedChangeListener(null);
                             off(holder);
                             holder.statusText.setText("Kondisi: Angkat");
-                            holder.servoSwitch.setOnCheckedChangeListener(new servoSwitch(holder, id));
-                            holder.autoSwitch.setOnCheckedChangeListener(new AutoSwitch(holder, id));
                         }
+                        deviceList.get(id).changeStat(stat);
+                        notifyDataSetChanged();
                     }
+                    holder.servoSwitch.setOnCheckedChangeListener(new servoSwitch(holder, id));
+                    holder.autoSwitch.setOnCheckedChangeListener(new AutoSwitch(holder, id));
                     holder.status.setOnCheckedChangeListener(new StatSwitch(holder, id));
                 }
 
@@ -192,11 +198,14 @@ public class DeviceAdapter extends RecyclerView.Adapter<DeviceAdapter.ViewHolder
             mIDeviceAdapter.status(servo, id, new VolleyCallback() {
                 @Override
                 public void onSuccess(boolean result) {
+                    Log.d("DeviceAdapter", String.valueOf(result));
                     if (!result) {
                         holder.servoSwitch.setChecked(!b);
                     } else {
                         String servText = servo.substring(0, 1).toUpperCase() + servo.substring(1);
                         holder.statusText.setText("Kondisi: " + servText);
+                        deviceList.get(id).changeServo(servo.substring(0, 1).toUpperCase() + servo.substring(1).toLowerCase());
+                        notifyDataSetChanged();
                     }
                     holder.servoSwitch.setOnCheckedChangeListener(new servoSwitch(holder, id));
                 }
@@ -211,7 +220,7 @@ public class DeviceAdapter extends RecyclerView.Adapter<DeviceAdapter.ViewHolder
 
 
     public class ViewHolder extends RecyclerView.ViewHolder {
-        TextView tvDevice, cahayaText, hujanText, statusText;
+        TextView tvDevice, cahayaText, hujanText, statusText, lembabText;
         Switch status, servoSwitch, autoSwitch;
 
         ViewHolder(View itemView) {
@@ -223,6 +232,7 @@ public class DeviceAdapter extends RecyclerView.Adapter<DeviceAdapter.ViewHolder
             status = (Switch) itemView.findViewById(R.id.switchDevice);
             servoSwitch = (Switch) itemView.findViewById(R.id.switchJemur);
             autoSwitch = (Switch) itemView.findViewById(R.id.switchOtomatis);
+            lembabText = (TextView) itemView.findViewById(R.id.Kelembaban);
         }
     }
 }

@@ -35,15 +35,17 @@ import java.util.concurrent.TimeUnit;
 
 public class MyJobService extends JobService {
     public static final String COUNTDOWN_BR = "com.adroitdevs.adroitapps.adroitiotservice";
-    String url = "http://10.103.102.61:3000/history";
+    String url = "http://192.168.88.59:3000/history";
     Date currentTime = Calendar.getInstance().getTime();
     SimpleDateFormat formatOld = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'", Locale.getDefault());
     Intent bi = new Intent(COUNTDOWN_BR);
-    CountDownTimer cdt;
+    CountDownTimer cdt = null;
+    JobParameters mJobParameters;
+    String id = "";
 
     @Override
     public boolean onStartJob(JobParameters job) {
-        final JobParameters jp = job;
+        mJobParameters = job;
         getRemaining(new VolleyCallback() {
             @Override
             public void onSuccess(boolean result) {
@@ -55,9 +57,10 @@ public class MyJobService extends JobService {
                 try {
                     Log.d("JobService", result.getString("tgl_selesai").substring(0, 10) + "T" + result.getString("tgl_selesai").substring(11, result.getString("tgl_selesai").length() - 7) + "Z");
                     Date resultDate = formatOld.parse(result.getString("tgl_selesai").substring(0, 10) + "T" + result.getString("tgl_selesai").substring(11, result.getString("tgl_selesai").length() - 7) + "Z");
-                    final String id = result.getString("id_jemuran");
+                    id = result.getString("id_jemuran");
                     long seconds = (resultDate.getTime() - currentTime.getTime());
                     int dateInSeconds = Integer.parseInt(String.valueOf(seconds));
+                    broadcastingID();
                      cdt = new CountDownTimer(dateInSeconds, 1000) {
                         @Override
                         public void onTick(long millisUntilFinished) {
@@ -70,8 +73,12 @@ public class MyJobService extends JobService {
 
                         @Override
                         public void onFinish() {
-                            updateStatus(id);
-                            jobFinished(jp, false);
+                            updateStatus();
+                            Log.d("JobService", "countdown finish");
+                            Intent done = new Intent(COUNTDOWN_BR);
+                            done.putExtra("updateList", true);
+                            sendBroadcast(done);
+                            jobFinished(mJobParameters, true);
                         }
                     };
                     cdt.start();
@@ -85,8 +92,13 @@ public class MyJobService extends JobService {
         return true;
     }
 
-    private void updateStatus(String id) {
-        final String idJemuran = id;
+    private void broadcastingID() {
+        Intent intentID = new Intent(COUNTDOWN_BR);
+        intentID.putExtra("id", id);
+        sendBroadcast(intentID);
+    }
+
+    private void updateStatus() {
         StringRequest request = new StringRequest(Request.Method.PUT, url, new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
@@ -106,7 +118,7 @@ public class MyJobService extends JobService {
             @Override
             protected Map<String, String> getParams() throws AuthFailureError {
                 Map<String, String> body = new HashMap<>();
-                body.put("id", idJemuran);
+                body.put("id", id);
                 return body;
             }
 
@@ -156,7 +168,10 @@ public class MyJobService extends JobService {
 
     @Override
     public boolean onStopJob(JobParameters job) {
-        cdt.cancel();
+        if (cdt != null) {
+            cdt.cancel();
+        }
+        Log.d("JobService", "JobStopped");
         return false;
     }
 }

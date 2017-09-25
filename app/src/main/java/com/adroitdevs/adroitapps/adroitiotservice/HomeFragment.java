@@ -33,11 +33,6 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.StringRequest;
-import com.firebase.jobdispatcher.FirebaseJobDispatcher;
-import com.firebase.jobdispatcher.GooglePlayDriver;
-import com.firebase.jobdispatcher.Job;
-import com.firebase.jobdispatcher.Lifetime;
-import com.firebase.jobdispatcher.Trigger;
 import com.google.gson.Gson;
 
 import org.json.JSONArray;
@@ -53,7 +48,7 @@ import java.util.Map;
  * A simple {@link Fragment} subclass.
  */
 public class HomeFragment extends Fragment implements DeviceAdapter.IDeviceAdapter {
-    private static final String URL = "http://10.103.102.61:3000/";
+    private static final String URL = "http://192.168.88.59:3000/";
     IListener mListener;
     DeviceAdapter mAdapter;
     RiwayatAdapter riwayatAdapter;
@@ -65,11 +60,18 @@ public class HomeFragment extends Fragment implements DeviceAdapter.IDeviceAdapt
     TextView listTitle, jemuranList, deviceList, hour, minute;
     RecyclerView rv;
     Gson gson = new Gson();
-    FirebaseJobDispatcher dispatcher;
-    Job myJob;
+    String idJemuran = "";
     private BroadcastReceiver br = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
+            if (intent.getExtras() != null && intent.hasExtra("id")) {
+                idJemuran = intent.getStringExtra("id");
+                Log.d("HomeFragment", idJemuran);
+            }
+            if (intent.getExtras() != null && intent.hasExtra("updateList")) {
+                updateListRiwayat();
+                Log.d("HomeFragment", "updateList");
+            }
             updateTimer(intent);
         }
     };
@@ -143,45 +145,37 @@ public class HomeFragment extends Fragment implements DeviceAdapter.IDeviceAdapt
                 listTitle.setText("Devices");
             }
         });
-        dispatcher = new FirebaseJobDispatcher(new GooglePlayDriver(context));
 
-        myJob = dispatcher.newJobBuilder()
-                .setService(MyJobService.class)
-                .setRecurring(true)
-                .setTag("JobService")
-                .setLifetime(Lifetime.UNTIL_NEXT_BOOT)
-                .setTrigger(Trigger.executionWindow(0, 0))
-                .setReplaceCurrent(false)
-                .build();
-
-        dispatcher.mustSchedule(myJob);
         return view;
     }
 
     @Override
     public void onResume() {
+        Log.d("HomeFragment", "Resume");
         super.onResume();
         this.getActivity().registerReceiver(br, new IntentFilter(MyJobService.COUNTDOWN_BR));
     }
 
     @Override
     public void onPause() {
-        super.onPause();
         this.getActivity().unregisterReceiver(br);
+        Log.d("HomeFragment", "Pause");
+        super.onPause();
     }
 
     @Override
     public void onStop() {
         try {
             this.getActivity().unregisterReceiver(br);
+            Log.d("HomeFragment", "Stop");
         } catch (Exception ex) {
 
         }
         super.onStop();
     }
 
-    private void updateTimer(Intent intent) {
-        if (intent.getExtras() != null) {
+    public void updateTimer(Intent intent) {
+        if (intent.getExtras() != null && intent.hasExtra("hours") && intent.hasExtra("minutes")) {
             int hours = intent.getIntExtra("hours", 0);
             int minutes = intent.getIntExtra("minutes", 0);
             hour.setText(String.valueOf(hours));
@@ -262,6 +256,43 @@ public class HomeFragment extends Fragment implements DeviceAdapter.IDeviceAdapt
         VolleySingleton.getInstance(this.getContext()).addToRequestQueue(request);
     }
 
+    private void updateStatus(final VolleyCallback callback) {
+        String url = URL + "history";
+        StringRequest request = new StringRequest(Request.Method.PUT, url, new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+                try {
+                    JSONObject res = new JSONObject(response);
+                    Log.d("update", String.valueOf(res.getBoolean("status")));
+                    callback.onSuccess(true);
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Log.e("update", error.toString());
+                callback.onSuccess(false);
+            }
+        }) {
+            @Override
+            protected Map<String, String> getParams() throws AuthFailureError {
+                Map<String, String> body = new HashMap<>();
+                body.put("id", idJemuran);
+                return body;
+            }
+
+            @Override
+            public Map<String, String> getHeaders() throws AuthFailureError {
+                Map<String, String> head = new HashMap<>();
+                head.put("Authorization", "Bearer " + TokenPrefrences.getToken(getContext()));
+                return head;
+            }
+        };
+        VolleySingleton.getInstance(getContext()).addToRequestQueue(request);
+    }
+
     @Override
     public void status(final String stat, final int id, final VolleyCallback callback) {
         String url = URL + "update";
@@ -274,19 +305,58 @@ public class HomeFragment extends Fragment implements DeviceAdapter.IDeviceAdapt
         StringRequest request = new StringRequest(Request.Method.PUT, url, new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
-                if(stat.equals("angkat") || stat.equals("Manual")){
-                    dispatcher.cancelAll();
-                    Log.d("ReqStat","Canceling Job");
-                    getActivity().unregisterReceiver(br);
+                Log.d("ReqStat", stat);
+                if (stat.equals("angkat") || stat.equals("Manual") || stat.equals("Off")) {
+                    mListener.stopJob(new VolleyCallback() {
+                        @Override
+                        public void onSuccess(boolean result) {
+                            if (result) {
+                                updateStatus(new VolleyCallback() {
+                                    @Override
+                                    public void onSuccess(boolean result) {
+                                        if (result) {
+                                            updateListRiwayat();
+                                        }
+                                    }
+
+                                    @Override
+                                    public void onSuccessJsonObject(JSONObject result) {
+
+                                    }
+                                });
+                            }
+                        }
+
+                        @Override
+                        public void onSuccessJsonObject(JSONObject result) {
+
+                        }
+                    });
+                    try {
+                        getActivity().unregisterReceiver(br);
+                    } catch (IllegalArgumentException ex) {
+                        Log.e("HomeFragment", ex.toString());
+                    }
                     hour.setText("0");
                     minute.setText("0");
-                }else{
-                    Log.d("ReqStat","Start Job");
+                } else if (!stat.equals("On")) {
                     getActivity().registerReceiver(br, new IntentFilter(MyJobService.COUNTDOWN_BR));
-                    dispatcher.mustSchedule(myJob);
+                    mListener.startJob(device.device_id, new VolleyCallback() {
+                        @Override
+                        public void onSuccess(boolean result) {
+                            if (result) {
+                                updateListRiwayat();
+                            }
+                        }
+
+                        @Override
+                        public void onSuccessJsonObject(JSONObject result) {
+
+                        }
+                    });
                 }
-                callback.onSuccess(true);
                 progressDialog.dismiss();
+                callback.onSuccess(true);
             }
         }, new Response.ErrorListener() {
             @Override
@@ -315,7 +385,47 @@ public class HomeFragment extends Fragment implements DeviceAdapter.IDeviceAdapt
         VolleySingleton.getInstance(this.getContext()).addToRequestQueue(request);
     }
 
+    private void updateListRiwayat() {
+        String url = URL + "history";
+        JsonObjectRequest request = new JsonObjectRequest(Request.Method.GET, url, null, new Response.Listener<JSONObject>() {
+            @Override
+            public void onResponse(JSONObject response) {
+                try {
+                    if (response.getBoolean("status")) {
+                        JSONArray result = response.getJSONArray("result");
+                        listJemur = new ArrayList<>();
+                        for (int j = 0; j < result.length(); j++) {
+                            JSONObject riwayat = result.getJSONObject(j);
+                            listJemur.add(gson.fromJson(riwayat.toString(), RiwayatJemur.class));
+                        }
+                        riwayatAdapter.refreshList(listJemur);
+                    }
+                } catch (JSONException e) {
+                    Log.e("HomeFragment", e.toString());
+                }
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+
+            }
+        }) {
+            @Override
+            public Map<String, String> getHeaders() throws AuthFailureError {
+                Map<String, String> head = new HashMap<>();
+                head.put("Conten-Type", "application/json");
+                head.put("Authorization", "Bearer " + TokenPrefrences.getToken(context));
+                return head;
+            }
+        };
+        VolleySingleton.getInstance(context).addToRequestQueue(request);
+    }
+
     interface IListener {
         void setTextProfile(String nama, String email);
+
+        void stopJob(VolleyCallback callback);
+
+        void startJob(String id, VolleyCallback callback);
     }
 }

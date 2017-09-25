@@ -15,6 +15,7 @@ import com.google.firebase.iid.FirebaseInstanceIdService;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.UnsupportedEncodingException;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -23,17 +24,19 @@ import java.util.Map;
  */
 
 public class MyFirebaseInstanceIDService extends FirebaseInstanceIdService {
+    private String token;
 
     @Override
     public void onTokenRefresh() {
-        String regToken = FirebaseInstanceId.getInstance().getToken();
-
-        sendToServer(regToken);
+        if (TokenPrefrences.getToken(getBaseContext()) != null) {
+            String regToken = FirebaseInstanceId.getInstance().getToken();
+            sendToServer(regToken);
+        }
     }
 
     private void sendToServer(String regToken) {
-        final String token = regToken;
-        String url = "http://10.103.102.61:3000/profile";
+        token = regToken;
+        String url = "http://192.168.88.59:3000/profile";
         StringRequest request = new StringRequest(Request.Method.PUT, url, new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
@@ -49,7 +52,11 @@ public class MyFirebaseInstanceIDService extends FirebaseInstanceIdService {
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-                Log.e("InstanceID", "Fail");
+                try {
+                    Log.e("InstanceID", new String(error.networkResponse.data, "UTF-8"));
+                } catch (UnsupportedEncodingException e) {
+                    Log.e("InstanceID", e.toString());
+                }
             }
         }) {
             @Override

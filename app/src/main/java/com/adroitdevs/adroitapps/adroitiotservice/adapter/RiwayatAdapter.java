@@ -69,6 +69,11 @@ public class RiwayatAdapter extends RecyclerView.Adapter<RiwayatAdapter.ViewHold
         return 0;
     }
 
+    public void refreshList(ArrayList<RiwayatJemur> listRiwayat) {
+        this.listRiwayat = listRiwayat;
+        this.notifyDataSetChanged();
+    }
+
     public class ViewHolder extends RecyclerView.ViewHolder {
         TextView tgl, stat, waktu;
         View side, circ;

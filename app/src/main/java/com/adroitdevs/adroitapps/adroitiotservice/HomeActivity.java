@@ -17,20 +17,33 @@ import android.view.View;
 import android.widget.TextView;
 
 import com.adroitdevs.adroitapps.adroitiotservice.model.TokenPrefrences;
+import com.adroitdevs.adroitapps.adroitiotservice.service.MyJobService;
 import com.android.volley.AuthFailureError;
+import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
+import com.firebase.jobdispatcher.FirebaseJobDispatcher;
+import com.firebase.jobdispatcher.GooglePlayDriver;
+import com.firebase.jobdispatcher.Job;
+import com.firebase.jobdispatcher.Lifetime;
+import com.firebase.jobdispatcher.Trigger;
 
+import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.Calendar;
 import java.util.HashMap;
 import java.util.Map;
 
 public class HomeActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener, HomeFragment.IListener {
+    private final String URL = "http://192.168.88.59:3000/";
     TextView namaUser, emailUser;
     ProgressDialog progressDialog;
+    FirebaseJobDispatcher dispatcher;
+    Job myJob;
+    Fragment fragment = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,6 +65,38 @@ public class HomeActivity extends AppCompatActivity
         navigationView.setCheckedItem(R.id.nav_camera);
         namaUser = (TextView) header.findViewById(R.id.namaUser);
         emailUser = (TextView) header.findViewById(R.id.emailUser);
+
+        dispatcher = new FirebaseJobDispatcher(new GooglePlayDriver(this));
+
+        myJob = dispatcher.newJobBuilder()
+                .setService(MyJobService.class)
+                .setRecurring(true)
+                .setTag("JobService")
+                .setLifetime(Lifetime.UNTIL_NEXT_BOOT)
+                .setTrigger(Trigger.executionWindow(0, 0))
+                .setReplaceCurrent(true)
+                .build();
+
+        dispatcher.mustSchedule(myJob);
+    }
+
+
+    @Override
+    protected void onStop() {
+        Log.d("Home", "Stop");
+        super.onStop();
+    }
+
+    @Override
+    protected void onPause() {
+        Log.d("Home", "Pause");
+        super.onPause();
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        Log.d("Home", "Destroy");
     }
 
     @Override
@@ -96,7 +141,6 @@ public class HomeActivity extends AppCompatActivity
     }
 
     private void changePage(int id) {
-        Fragment fragment = null;
 
         if (id == R.id.nav_camera) {
             fragment = new HomeFragment();
@@ -141,7 +185,7 @@ public class HomeActivity extends AppCompatActivity
     }
 
     private void logOutWeb(final VolleyCallback callback) {
-        String url = "http://10.103.102.61:3000/logout";
+        String url = URL + "logout";
         StringRequest request = new StringRequest(url, new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
@@ -178,5 +222,54 @@ public class HomeActivity extends AppCompatActivity
     public void setTextProfile(String nama, String email) {
         namaUser.setText(nama);
         emailUser.setText(email);
+    }
+
+    @Override
+    public void stopJob(VolleyCallback callback) {
+        callback.onSuccess(true);
+        dispatcher.cancelAll();
+        Log.d("ReqStat", "Canceling Job");
+    }
+
+    @Override
+    public void startJob(final String id, final VolleyCallback callback) {
+        String url = URL + "history";
+        StringRequest request = new StringRequest(Request.Method.POST, url, new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+                try {
+                    JSONObject res = new JSONObject(response);
+                    if (res.getBoolean("status")) {
+                        dispatcher.mustSchedule(myJob);
+                        callback.onSuccess(true);
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                callback.onSuccess(false);
+                Log.e("Home", error.toString());
+            }
+        }) {
+            @Override
+            protected Map<String, String> getParams() throws AuthFailureError {
+                Map<String, String> body = new HashMap<>();
+                body.put("id", id);
+                body.put("date", Calendar.getInstance().getTime().toString());
+                return body;
+            }
+
+            @Override
+            public Map<String, String> getHeaders() throws AuthFailureError {
+                Map<String, String> head = new HashMap<>();
+                head.put("Authorization", "Bearer " + TokenPrefrences.getToken(getBaseContext()));
+                return head;
+            }
+        };
+        VolleySingleton.getInstance(this).addToRequestQueue(request);
+        Log.d("ReqStat", "Start Job");
     }
 }

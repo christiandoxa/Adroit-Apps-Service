@@ -18,6 +18,9 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -53,24 +56,36 @@ public class HomeFragment extends Fragment implements DeviceAdapter.IDeviceAdapt
     DeviceAdapter mAdapter;
     RiwayatAdapter riwayatAdapter;
     ArrayList<Device> mList = new ArrayList<>();
+    String idCountdown = "";
     ArrayList<RiwayatJemur> listJemur = new ArrayList<>();
     // TODO: Rename and change types of parameters
     ProgressDialog progressDialog;
     Context context;
     TextView listTitle, jemuranList, deviceList, hour, minute;
+    Spinner listCountdown;
     RecyclerView rv;
     Gson gson = new Gson();
+    ArrayList<String> idArray = new ArrayList<>();
+    ArrayList<String> indexArray = new ArrayList<>();
     String idJemuran = "";
     private BroadcastReceiver br = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
-            if (intent.getExtras() != null && intent.hasExtra("id")) {
-                idJemuran = intent.getStringExtra("id");
-                Log.d("HomeFragment", idJemuran);
-            }
-            if (intent.getExtras() != null && intent.hasExtra("updateList")) {
-                updateListRiwayat();
-                Log.d("HomeFragment", "updateList");
+            if (intent.getExtras() != null) {
+                if (intent.hasExtra("updateList")) {
+                    updateListRiwayat();
+                    Log.d("HomeFragment", "updateList");
+                }
+                if (intent.hasExtra("idArray") && intent.hasExtra("indexArray")) {
+                    idArray = intent.getStringArrayListExtra("idArray");
+                    indexArray = intent.getStringArrayListExtra("indexArray");
+                    ArrayAdapter<String> adapter = new ArrayAdapter<String>(getContext(), android.R.layout.simple_spinner_item, idArray);
+                    adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                    Log.d("HomeFragment", "idArray : " + idArray.toString());
+                    Log.d("HomeFragment", "indeArray : " + indexArray.toString());
+                    listCountdown.setAdapter(adapter);
+                    idCountdown = idArray.get(0);
+                }
             }
             updateTimer(intent);
         }
@@ -108,6 +123,18 @@ public class HomeFragment extends Fragment implements DeviceAdapter.IDeviceAdapt
         deviceList = (TextView) view.findViewById(R.id.listDevices);
         hour = (TextView) view.findViewById(R.id.hourTime);
         minute = (TextView) view.findViewById(R.id.minuteTime);
+        listCountdown = (Spinner) view.findViewById(R.id.deviceSpinner);
+        listCountdown.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+                idCountdown = listCountdown.getSelectedItem().toString();
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> adapterView) {
+
+            }
+        });
         LinearLayoutManager lm = new LinearLayoutManager(this.getContext());
         rv = (RecyclerView) view.findViewById(R.id.frame);
         rv.setLayoutManager(lm);
@@ -175,7 +202,7 @@ public class HomeFragment extends Fragment implements DeviceAdapter.IDeviceAdapt
     }
 
     public void updateTimer(Intent intent) {
-        if (intent.getExtras() != null && intent.hasExtra("hours") && intent.hasExtra("minutes")) {
+        if (intent.getExtras() != null && intent.hasExtra("hours") && intent.hasExtra("minutes") && intent.hasExtra("id") && intent.getStringExtra("id").equals(idCountdown)) {
             int hours = intent.getIntExtra("hours", 0);
             int minutes = intent.getIntExtra("minutes", 0);
             hour.setText(String.valueOf(hours));
@@ -256,8 +283,9 @@ public class HomeFragment extends Fragment implements DeviceAdapter.IDeviceAdapt
         VolleySingleton.getInstance(this.getContext()).addToRequestQueue(request);
     }
 
-    private void updateStatus(final VolleyCallback callback) {
+    private void updateStatus(String id, final VolleyCallback callback) {
         String url = URL + "history";
+        final String idJemuran = id;
         StringRequest request = new StringRequest(Request.Method.PUT, url, new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
@@ -307,11 +335,15 @@ public class HomeFragment extends Fragment implements DeviceAdapter.IDeviceAdapt
             public void onResponse(String response) {
                 Log.d("ReqStat", stat);
                 if (stat.equals("angkat") || stat.equals("Manual") || stat.equals("Off")) {
-                    mListener.stopJob(new VolleyCallback() {
+                    mListener.stopJob(device.device_id, new VolleyCallback() {
                         @Override
                         public void onSuccess(boolean result) {
                             if (result) {
-                                updateStatus(new VolleyCallback() {
+                                String idUpdate = "";
+                                if (idArray.contains(device.device_id)) {
+                                    idUpdate = indexArray.get(idArray.indexOf(device.device_id));
+                                }
+                                updateStatus(idUpdate, new VolleyCallback() {
                                     @Override
                                     public void onSuccess(boolean result) {
                                         if (result) {
@@ -323,6 +355,11 @@ public class HomeFragment extends Fragment implements DeviceAdapter.IDeviceAdapt
                                     public void onSuccessJsonObject(JSONObject result) {
 
                                     }
+
+                                    @Override
+                                    public void onSuccessJsonArray(JSONArray result) {
+
+                                    }
                                 });
                             }
                         }
@@ -331,16 +368,15 @@ public class HomeFragment extends Fragment implements DeviceAdapter.IDeviceAdapt
                         public void onSuccessJsonObject(JSONObject result) {
 
                         }
+
+                        @Override
+                        public void onSuccessJsonArray(JSONArray result) {
+
+                        }
                     });
-                    try {
-                        getActivity().unregisterReceiver(br);
-                    } catch (IllegalArgumentException ex) {
-                        Log.e("HomeFragment", ex.toString());
-                    }
                     hour.setText("0");
                     minute.setText("0");
                 } else if (!stat.equals("On")) {
-                    getActivity().registerReceiver(br, new IntentFilter(MyJobService.COUNTDOWN_BR));
                     mListener.startJob(device.device_id, new VolleyCallback() {
                         @Override
                         public void onSuccess(boolean result) {
@@ -351,6 +387,11 @@ public class HomeFragment extends Fragment implements DeviceAdapter.IDeviceAdapt
 
                         @Override
                         public void onSuccessJsonObject(JSONObject result) {
+
+                        }
+
+                        @Override
+                        public void onSuccessJsonArray(JSONArray result) {
 
                         }
                     });
@@ -424,7 +465,7 @@ public class HomeFragment extends Fragment implements DeviceAdapter.IDeviceAdapt
     interface IListener {
         void setTextProfile(String nama, String email);
 
-        void stopJob(VolleyCallback callback);
+        void stopJob(String id, VolleyCallback callback);
 
         void startJob(String id, VolleyCallback callback);
     }

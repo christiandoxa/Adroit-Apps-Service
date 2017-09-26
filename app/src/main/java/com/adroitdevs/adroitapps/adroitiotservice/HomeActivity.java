@@ -29,6 +29,7 @@ import com.firebase.jobdispatcher.Job;
 import com.firebase.jobdispatcher.Lifetime;
 import com.firebase.jobdispatcher.Trigger;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -97,6 +98,7 @@ public class HomeActivity extends AppCompatActivity
     protected void onDestroy() {
         super.onDestroy();
         Log.d("Home", "Destroy");
+        dispatcher.cancelAll();
     }
 
     @Override
@@ -172,6 +174,11 @@ public class HomeActivity extends AppCompatActivity
                 public void onSuccessJsonObject(JSONObject result) {
 
                 }
+
+                @Override
+                public void onSuccessJsonArray(JSONArray result) {
+
+                }
             });
         }
 
@@ -225,9 +232,11 @@ public class HomeActivity extends AppCompatActivity
     }
 
     @Override
-    public void stopJob(VolleyCallback callback) {
+    public void stopJob(String id, VolleyCallback callback) {
         callback.onSuccess(true);
-        dispatcher.cancelAll();
+        Intent stopIntent = new Intent(MyJobService.COUNTDOWN_BR);
+        stopIntent.putExtra("idCount", id);
+        sendBroadcast(stopIntent);
         Log.d("ReqStat", "Canceling Job");
     }
 

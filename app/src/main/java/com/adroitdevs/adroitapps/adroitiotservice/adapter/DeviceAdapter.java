@@ -14,6 +14,7 @@ import com.adroitdevs.adroitapps.adroitiotservice.R;
 import com.adroitdevs.adroitapps.adroitiotservice.VolleyCallback;
 import com.adroitdevs.adroitapps.adroitiotservice.model.Device;
 
+import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
@@ -123,6 +124,11 @@ public class DeviceAdapter extends RecyclerView.Adapter<DeviceAdapter.ViewHolder
                 public void onSuccessJsonObject(JSONObject result) {
 
                 }
+
+                @Override
+                public void onSuccessJsonArray(JSONArray result) {
+
+                }
             });
         }
     }
@@ -172,6 +178,11 @@ public class DeviceAdapter extends RecyclerView.Adapter<DeviceAdapter.ViewHolder
                 public void onSuccessJsonObject(JSONObject result) {
 
                 }
+
+                @Override
+                public void onSuccessJsonArray(JSONArray result) {
+
+                }
             });
         }
     }
@@ -212,6 +223,11 @@ public class DeviceAdapter extends RecyclerView.Adapter<DeviceAdapter.ViewHolder
 
                 @Override
                 public void onSuccessJsonObject(JSONObject result) {
+
+                }
+
+                @Override
+                public void onSuccessJsonArray(JSONArray result) {
 
                 }
             });

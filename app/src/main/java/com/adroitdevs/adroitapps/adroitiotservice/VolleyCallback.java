@@ -1,5 +1,6 @@
 package com.adroitdevs.adroitapps.adroitiotservice;
 
+import org.json.JSONArray;
 import org.json.JSONObject;
 
 /**
@@ -10,4 +11,6 @@ public interface VolleyCallback {
     void onSuccess(boolean result);
 
     void onSuccessJsonObject(JSONObject result);
+
+    void onSuccessJsonArray(JSONArray result);
 }

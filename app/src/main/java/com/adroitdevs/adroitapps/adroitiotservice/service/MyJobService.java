@@ -1,6 +1,9 @@
 package com.adroitdevs.adroitapps.adroitiotservice.service;
 
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.CountDownTimer;
 import android.util.Log;
 
@@ -22,9 +25,11 @@ import org.json.JSONObject;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
@@ -40,11 +45,33 @@ public class MyJobService extends JobService {
     SimpleDateFormat formatOld = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'", Locale.getDefault());
     Intent bi = new Intent(COUNTDOWN_BR);
     CountDownTimer cdt = null;
+    JSONArray cdtsJSON;
+    List<CountDownTimer> cdts = new ArrayList<>();
     JobParameters mJobParameters;
-    String id = "";
+
+    private BroadcastReceiver broadcastReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            if (intent.getExtras() != null && intent.hasExtra("idCount") && cdtsJSON != null && !cdts.isEmpty()) {
+                for (int i = 0; i < cdtsJSON.length(); i++) {
+                    try {
+                        JSONObject cdtJ = cdtsJSON.getJSONObject(i);
+                        if (cdtJ.getString("deviceID").equals(intent.getStringExtra("idCount"))) {
+                            CountDownTimer cdtCancel = cdts.get(cdtJ.getInt("listIndex"));
+                            cdtCancel.cancel();
+                            cdts.remove(cdtJ.getInt("listIndex"));
+                        }
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+        }
+    };
 
     @Override
     public boolean onStartJob(JobParameters job) {
+        getBaseContext().registerReceiver(broadcastReceiver, new IntentFilter(COUNTDOWN_BR));
         mJobParameters = job;
         getRemaining(new VolleyCallback() {
             @Override
@@ -54,7 +81,7 @@ public class MyJobService extends JobService {
 
             @Override
             public void onSuccessJsonObject(JSONObject result) {
-                try {
+                /*try {
                     Log.d("JobService", result.getString("tgl_selesai").substring(0, 10) + "T" + result.getString("tgl_selesai").substring(11, result.getString("tgl_selesai").length() - 7) + "Z");
                     Date resultDate = formatOld.parse(result.getString("tgl_selesai").substring(0, 10) + "T" + result.getString("tgl_selesai").substring(11, result.getString("tgl_selesai").length() - 7) + "Z");
                     id = result.getString("id_jemuran");
@@ -86,19 +113,49 @@ public class MyJobService extends JobService {
                     e.printStackTrace();
                 } catch (JSONException e) {
                     e.printStackTrace();
+                }*/
+            }
+
+            @Override
+            public void onSuccessJsonArray(JSONArray result) {
+                try {
+                    ArrayList<String> IDs = new ArrayList<String>();
+                    ArrayList<String> Indexs = new ArrayList<String>();
+                    cdtsJSON = new JSONArray();
+                    for (int i = 0; i < result.length(); i++) {
+                        JSONObject res = result.getJSONObject(i);
+                        Log.d("JobService", res.getString("tgl_selesai").substring(0, 10) + "T" + res.getString("tgl_selesai").substring(11, res.getString("tgl_selesai").length() - 7) + "Z");
+                        Date resultDate = formatOld.parse(res.getString("tgl_selesai").substring(0, 10) + "T" + res.getString("tgl_selesai").substring(11, res.getString("tgl_selesai").length() - 7) + "Z");
+                        long seconds = (resultDate.getTime() - currentTime.getTime());
+                        int dateInSeconds = Integer.parseInt(String.valueOf(seconds));
+                        IDs.add(res.getString("device_id"));
+                        Indexs.add(res.getString("id_jemuran"));
+                        cdts.add(i, new HistoryTimer(dateInSeconds, 1000, res.getString("device_id"), res.getString("id_jemuran")).start());
+                        JSONObject cdtJSON = new JSONObject();
+                        cdtJSON.put("deviceID", res.getString("device_id"));
+                        cdtJSON.put("listIndex", i);
+                        cdtsJSON.put(cdtJSON);
+                    }
+                    broadcastingID(IDs, Indexs);
+                } catch (ParseException e) {
+                    e.printStackTrace();
+                } catch (JSONException e) {
+                    e.printStackTrace();
                 }
             }
         });
         return true;
     }
 
-    private void broadcastingID() {
+    private void broadcastingID(ArrayList<String> id, ArrayList<String> indexs) {
         Intent intentID = new Intent(COUNTDOWN_BR);
-        intentID.putExtra("id", id);
+        intentID.putExtra("idArray", id);
+        intentID.putExtra("indexArray", indexs);
         sendBroadcast(intentID);
     }
 
-    private void updateStatus() {
+    private void updateStatus(String id) {
+        final String idJem = id;
         StringRequest request = new StringRequest(Request.Method.PUT, url, new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
@@ -118,7 +175,7 @@ public class MyJobService extends JobService {
             @Override
             protected Map<String, String> getParams() throws AuthFailureError {
                 Map<String, String> body = new HashMap<>();
-                body.put("id", id);
+                body.put("id", idJem);
                 return body;
             }
 
@@ -138,13 +195,16 @@ public class MyJobService extends JobService {
             public void onResponse(JSONObject response) {
                 try {
                     JSONArray result = response.getJSONArray("result");
+                    JSONArray res = new JSONArray();
+                    List<String> idDevice = new ArrayList<>();
                     for (int i = 0; i < result.length(); i++) {
                         JSONObject history = result.getJSONObject(i);
-                        if (history.getString("status").equals("belum kering")) {
-                            callback.onSuccessJsonObject(history);
-                            break;
+                        if (history.getString("status").equals("belum kering") && !idDevice.contains(history.getString("device_id"))) {
+                            idDevice.add(history.getString("device_id"));
+                            res.put(history);
                         }
                     }
+                    callback.onSuccessJsonArray(res);
                 } catch (JSONException e) {
                     Log.e("JobService", e.toString());
                 }
@@ -168,10 +228,47 @@ public class MyJobService extends JobService {
 
     @Override
     public boolean onStopJob(JobParameters job) {
-        if (cdt != null) {
+        /*if(cdt!=null){
             cdt.cancel();
+        }*/
+        if (!cdts.isEmpty()) {
+            for (int i = 0; i < cdts.size(); i++) {
+                CountDownTimer cTimer = cdts.get(i);
+                cTimer.cancel();
+            }
         }
+        getBaseContext().unregisterReceiver(broadcastReceiver);
         Log.d("JobService", "JobStopped");
         return false;
+    }
+
+    public class HistoryTimer extends CountDownTimer {
+        public String idDevice = "";
+        public String idJemuran = "";
+
+        public HistoryTimer(long millisInFuture, long countDownInterval, String idDevice, String idJemuran) {
+            super(millisInFuture, countDownInterval);
+            this.idDevice = idDevice;
+            this.idJemuran = idJemuran;
+        }
+
+        @Override
+        public void onTick(long millisUntilFinished) {
+            int hours = (int) TimeUnit.SECONDS.toHours(millisUntilFinished / 1000);
+            int minutes = (int) TimeUnit.SECONDS.toMinutes(millisUntilFinished / 1000) - (hours * 60);
+            bi.putExtra("id", idDevice);
+            bi.putExtra("hours", hours);
+            bi.putExtra("minutes", minutes);
+            sendBroadcast(bi);
+        }
+
+        @Override
+        public void onFinish() {
+            updateStatus(idJemuran);
+            Log.d("JobService " + idDevice, "countdown finish");
+            Intent done = new Intent(COUNTDOWN_BR);
+            done.putExtra("updateList", true);
+            sendBroadcast(done);
+        }
     }
 }

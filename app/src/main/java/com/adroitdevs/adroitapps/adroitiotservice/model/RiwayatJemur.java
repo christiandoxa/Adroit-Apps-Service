@@ -23,6 +23,9 @@ public class RiwayatJemur implements Parcelable {
     public String device_id;
     public String tanggal_jemur;
     public String estimasi_waktu;
+    public int hujan;
+    public int lembab;
+    public int cahaya;
     public String email;
     public String status;
 
@@ -31,6 +34,9 @@ public class RiwayatJemur implements Parcelable {
         device_id = in.readString();
         tanggal_jemur = in.readString();
         estimasi_waktu = in.readString();
+        hujan = in.readInt();
+        lembab = in.readInt();
+        cahaya = in.readInt();
         email = in.readString();
         status = in.readString();
     }
@@ -46,6 +52,9 @@ public class RiwayatJemur implements Parcelable {
         parcel.writeString(device_id);
         parcel.writeString(tanggal_jemur);
         parcel.writeString(estimasi_waktu);
+        parcel.writeInt(hujan);
+        parcel.writeInt(lembab);
+        parcel.writeInt(cahaya);
         parcel.writeString(email);
         parcel.writeString(status);
     }

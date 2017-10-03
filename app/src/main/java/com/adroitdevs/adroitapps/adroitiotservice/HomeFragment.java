@@ -7,7 +7,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Bundle;
-import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
@@ -52,6 +51,9 @@ import java.util.Map;
  */
 public class HomeFragment extends Fragment implements DeviceAdapter.IDeviceAdapter {
     private static final String URL = "http://192.168.88.59:3000/";
+    private static final String SAVED_ID = "savedIdArray";
+    private static final String SAVED_ID_COUNTDOWN = "savedIdCountdown";
+    private static final String SAVED_INDEX = "savedIndexArray";
     IListener mListener;
     DeviceAdapter mAdapter;
     RiwayatAdapter riwayatAdapter;
@@ -67,7 +69,6 @@ public class HomeFragment extends Fragment implements DeviceAdapter.IDeviceAdapt
     Gson gson = new Gson();
     ArrayList<String> idArray = new ArrayList<>();
     ArrayList<String> indexArray = new ArrayList<>();
-    String idJemuran = "";
     private BroadcastReceiver br = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
@@ -96,16 +97,12 @@ public class HomeFragment extends Fragment implements DeviceAdapter.IDeviceAdapt
     }
 
     @Override
-    public void onCreate(@Nullable Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        context = this.getContext();
-        mListener = (IListener) context;
-    }
-
-    @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
+        Log.d("HomeFragment", "onCreateView");
+        context = this.getContext();
+        mListener = (IListener) context;
         View view = inflater.inflate(R.layout.fragment_home, container, false);
 
         FloatingActionButton fab = (FloatingActionButton) view.findViewById(R.id.fab);
@@ -181,6 +178,9 @@ public class HomeFragment extends Fragment implements DeviceAdapter.IDeviceAdapt
         Log.d("HomeFragment", "Resume");
         super.onResume();
         this.getActivity().registerReceiver(br, new IntentFilter(MyJobService.COUNTDOWN_BR));
+        Intent intentResume = new Intent(MyJobService.COUNTDOWN_BR);
+        intentResume.putExtra("resume", true);
+        this.getActivity().sendBroadcast(intentResume);
     }
 
     @Override
@@ -335,6 +335,8 @@ public class HomeFragment extends Fragment implements DeviceAdapter.IDeviceAdapt
             public void onResponse(String response) {
                 Log.d("ReqStat", stat);
                 if (stat.equals("angkat") || stat.equals("Manual") || stat.equals("Off")) {
+                    hour.setText("0");
+                    minute.setText("0");
                     mListener.stopJob(device.device_id, new VolleyCallback() {
                         @Override
                         public void onSuccess(boolean result) {
@@ -374,8 +376,6 @@ public class HomeFragment extends Fragment implements DeviceAdapter.IDeviceAdapt
 
                         }
                     });
-                    hour.setText("0");
-                    minute.setText("0");
                 } else if (!stat.equals("On")) {
                     mListener.startJob(device.device_id, new VolleyCallback() {
                         @Override

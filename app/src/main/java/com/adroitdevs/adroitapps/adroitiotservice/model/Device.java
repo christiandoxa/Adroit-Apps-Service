@@ -21,13 +21,13 @@ public class Device implements Parcelable {
     };
     public String device_id;
     public String status;
-    public String cahaya;
-    public String hujan;
-    public String lembab;
+    public int cahaya;
+    public int hujan;
+    public int lembab;
     public String servo;
     public String auto;
 
-    public Device(String device_id, String status, String cahaya, String hujan, String lembab, String servo, String auto) {
+    public Device(String device_id, String status, int cahaya, int hujan, int lembab, String servo, String auto) {
         this.device_id = device_id;
         this.status = status;
         this.cahaya = cahaya;
@@ -40,9 +40,9 @@ public class Device implements Parcelable {
     protected Device(Parcel in) {
         device_id = in.readString();
         status = in.readString();
-        cahaya = in.readString();
-        hujan = in.readString();
-        lembab = in.readString();
+        cahaya = in.readInt();
+        hujan = in.readInt();
+        lembab = in.readInt();
         servo = in.readString();
         auto = in.readString();
     }
@@ -68,9 +68,9 @@ public class Device implements Parcelable {
     public void writeToParcel(Parcel parcel, int i) {
         parcel.writeString(device_id);
         parcel.writeString(status);
-        parcel.writeString(cahaya);
-        parcel.writeString(hujan);
-        parcel.writeString(lembab);
+        parcel.writeInt(cahaya);
+        parcel.writeInt(hujan);
+        parcel.writeInt(lembab);
         parcel.writeString(servo);
         parcel.writeString(auto);
     }

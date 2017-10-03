@@ -150,14 +150,8 @@ public class HomeActivity extends AppCompatActivity
         } else if (id == R.id.nav_gallery) {
             fragment = new AboutFragment();
             setTitle("Tentang Adroit Devs");
-        } else if (id == R.id.nav_slideshow) {
-
-        } else if (id == R.id.nav_manage) {
-
-        } else if (id == R.id.nav_share) {
-
         } else if (id == R.id.nav_send) {
-            progressDialog = new ProgressDialog(getBaseContext());
+            progressDialog = new ProgressDialog(this);
             progressDialog.setMessage("Loading");
             progressDialog.setCanceledOnTouchOutside(false);
             progressDialog.setCancelable(false);
@@ -218,6 +212,7 @@ public class HomeActivity extends AppCompatActivity
 
     public void logOut() {
         TokenPrefrences.clearToken(this);
+        dispatcher.cancelAll();
         Intent intent = new Intent(this, SigninActivity.class);
         intent.putExtra("logout", true);
         progressDialog.dismiss();

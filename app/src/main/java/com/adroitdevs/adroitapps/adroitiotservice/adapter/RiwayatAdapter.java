@@ -47,6 +47,11 @@ public class RiwayatAdapter extends RecyclerView.Adapter<RiwayatAdapter.ViewHold
         int time = Integer.parseInt(String.valueOf(TimeUnit.SECONDS.toMinutes(Integer.parseInt(riwayatJemur.estimasi_waktu))));
         holder.waktu.setText(String.valueOf(time) + " menit");
         holder.stat.setText(riwayatJemur.status);
+        String cahaya = riwayatJemur.cahaya > 200 ? "Terang" : "Cahaya Kurang";
+        String hujan = riwayatJemur.hujan > 340 ? "Kering" : "Hujan";
+        holder.cahaya.setText("Cahaya : " + cahaya);
+        holder.hujan.setText("Cuaca : " + hujan);
+        holder.lembab.setText(riwayatJemur.lembab + "%");
         try {
             Date date = formatOld.parse(riwayatJemur.tanggal_jemur);
             newDate = formatNew.format(date);
@@ -75,7 +80,7 @@ public class RiwayatAdapter extends RecyclerView.Adapter<RiwayatAdapter.ViewHold
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {
-        TextView tgl, stat, waktu;
+        TextView tgl, stat, waktu, hujan, cahaya, lembab;
         View side, circ;
 
         public ViewHolder(View itemView) {
@@ -83,6 +88,9 @@ public class RiwayatAdapter extends RecyclerView.Adapter<RiwayatAdapter.ViewHold
             tgl = (TextView) itemView.findViewById(R.id.riwTgl);
             stat = (TextView) itemView.findViewById(R.id.riwStatus);
             waktu = (TextView) itemView.findViewById(R.id.riwTime);
+            hujan = (TextView) itemView.findViewById(R.id.hujanRiwayat);
+            cahaya = (TextView) itemView.findViewById(R.id.cahayaRiwayat);
+            lembab = (TextView) itemView.findViewById(R.id.lembabRiwayat);
             side = itemView.findViewById(R.id.sideView);
             circ = itemView.findViewById(R.id.bunderan);
         }

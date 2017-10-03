@@ -40,8 +40,10 @@ public class DeviceAdapter extends RecyclerView.Adapter<DeviceAdapter.ViewHolder
     public void onBindViewHolder(ViewHolder holder, int position) {
         device = deviceList.get(position);
         holder.tvDevice.setText(device.device_id);
-        holder.cahayaText.setText(device.cahaya + " cd");
-        holder.hujanText.setText(device.hujan + " mm");
+        String cahaya = device.cahaya > 200 ? "Terang" : "Cahaya Kurang";
+        holder.cahayaText.setText("Cahaya : " + cahaya);
+        String hujan = device.hujan > 340 ? "Kering" : "Hujan";
+        holder.hujanText.setText("Cuaca : " + hujan);
         holder.lembabText.setText(device.lembab + "%");
         holder.statusText.setText("Kondisi: " + device.servo);
         holder.status.setChecked(device.status.equals("On"));

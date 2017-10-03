@@ -82,30 +82,6 @@
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="@dimen/activity_horizontal_margin" />
 
-                <TextView
-                    fontPath="font/Lato-Medium.ttf"
-                    android:layout_width="wrap_content"
-                    android:layout_height="20dp"
-                    android:layout_marginLeft="20dp"
-                    android:gravity="center"
-                    android:text="Terang: Satu kali"
-                    android:textColor="@color/colorGray"
-                    android:textSize="12sp"
-                    android:textStyle="bold"
-                    tools:ignore="MissingPrefix" />
-
-                <TextView
-                    fontPath="font/Lato-Medium.ttf"
-                    android:layout_width="wrap_content"
-                    android:layout_height="20dp"
-                    android:layout_marginLeft="20dp"
-                    android:gravity="center"
-                    android:text="Hujan: Satu kali"
-                    android:textColor="@color/colorGray"
-                    android:textSize="12sp"
-                    android:textStyle="bold"
-                    tools:ignore="MissingPrefix" />
-
             </LinearLayout>
 
             <LinearLayout

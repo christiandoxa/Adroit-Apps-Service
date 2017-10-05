@@ -50,7 +50,7 @@ import java.util.Map;
  * A simple {@link Fragment} subclass.
  */
 public class HomeFragment extends Fragment implements DeviceAdapter.IDeviceAdapter {
-    private static final String URL = "http://192.168.88.59:3000/";
+    private static final String URL = "http://10.100.47.171:3000/";
     private static final String SAVED_ID = "savedIdArray";
     private static final String SAVED_ID_COUNTDOWN = "savedIdCountdown";
     private static final String SAVED_INDEX = "savedIndexArray";
@@ -85,7 +85,13 @@ public class HomeFragment extends Fragment implements DeviceAdapter.IDeviceAdapt
                     Log.d("HomeFragment", "idArray : " + idArray.toString());
                     Log.d("HomeFragment", "indeArray : " + indexArray.toString());
                     listCountdown.setAdapter(adapter);
-                    idCountdown = idArray.get(0);
+                    if (!idArray.isEmpty()) {
+                        idCountdown = idArray.get(0);
+                    } else {
+                        idCountdown = "";
+                        hour.setText("0");
+                        minute.setText("0");
+                    }
                 }
             }
             updateTimer(intent);
@@ -435,7 +441,8 @@ public class HomeFragment extends Fragment implements DeviceAdapter.IDeviceAdapt
                     if (response.getBoolean("status")) {
                         JSONArray result = response.getJSONArray("result");
                         listJemur = new ArrayList<>();
-                        for (int j = 0; j < result.length(); j++) {
+                        int batas = result.length() > 7 ? result.length() - 7 : 0;
+                        for (int j = result.length() - 1; j >= batas; j--) {
                             JSONObject riwayat = result.getJSONObject(j);
                             listJemur.add(gson.fromJson(riwayat.toString(), RiwayatJemur.class));
                         }

@@ -40,33 +40,27 @@ import java.util.concurrent.TimeUnit;
 
 public class MyJobService extends JobService {
     public static final String COUNTDOWN_BR = "com.adroitdevs.adroitapps.adroitiotservice";
-    String url = "http://192.168.88.59:3000/history";
+    String url = "http://10.100.47.171:3000/history";
     Date currentTime = Calendar.getInstance().getTime();
     SimpleDateFormat formatOld = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'", Locale.getDefault());
     Intent bi = new Intent(COUNTDOWN_BR);
     CountDownTimer cdt = null;
-    ArrayList<String> cdtsArray;
-    List<CountDownTimer> cdts = new ArrayList<>();
+    Map<String, CountDownTimer> cdts = new HashMap<>();
     JobParameters mJobParameters;
     private ArrayList<String> IDs;
     private ArrayList<String> Indexs;
     private BroadcastReceiver broadcastReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
-            if (intent.getExtras() != null && intent.hasExtra("idCount") && cdtsArray != null && !cdts.isEmpty()) {
-                for (int i = 0; i < cdts.size(); i++) {
-                    if (cdtsArray.get(i).equals(intent.getStringExtra("idCount"))) {
-                        CountDownTimer cdtCancel = cdts.get(cdtsArray.indexOf(intent.getStringExtra("idCount")));
-                        cdtCancel.cancel();
-                        cdts.remove(cdtsArray.indexOf(intent.getStringExtra("idCount")));
-                        cdtsArray.remove(intent.getStringExtra("idCount"));
-                    }
+            if (intent.getExtras() != null && intent.hasExtra("idCount") && !cdts.isEmpty()) {
+                if (!cdts.isEmpty()) {
+                    CountDownTimer cdtCancel = cdts.get(intent.getStringExtra("idCount"));
+                    cdtCancel.cancel();
+                    cdts.remove(intent.getStringExtra("idCount"));
+                    Indexs.remove(IDs.indexOf(intent.getStringExtra("idCount")));
+                    IDs.remove(IDs.indexOf(intent.getStringExtra("idCount")));
                 }
-                Indexs.remove(IDs.indexOf(intent.getStringExtra("idCount")));
-                IDs.remove(IDs.indexOf(intent.getStringExtra("idCount")));
-                if (!IDs.isEmpty() && !Indexs.isEmpty()) {
-                    broadcastingID();
-                }
+                broadcastingID();
             }
             if (intent.getExtras() != null && intent.hasExtra("resume")) {
                 if (intent.getBooleanExtra("resume", false) && !IDs.isEmpty() && !Indexs.isEmpty()) {
@@ -128,7 +122,6 @@ public class MyJobService extends JobService {
                 try {
                     IDs = new ArrayList<String>();
                     Indexs = new ArrayList<String>();
-                    cdtsArray = new ArrayList<String>();
                     for (int i = 0; i < result.length(); i++) {
                         JSONObject res = result.getJSONObject(i);
                         Log.d("JobService", res.getString("tgl_selesai").substring(0, 10) + "T" + res.getString("tgl_selesai").substring(11, res.getString("tgl_selesai").length() - 7) + "Z");
@@ -137,8 +130,7 @@ public class MyJobService extends JobService {
                         int dateInSeconds = Integer.parseInt(String.valueOf(seconds));
                         IDs.add(res.getString("device_id"));
                         Indexs.add(res.getString("id_jemuran"));
-                        cdts.add(new HistoryTimer(dateInSeconds, 1000, res.getString("device_id"), res.getString("id_jemuran")).start());
-                        cdtsArray.add(res.getString("device_id"));
+                        cdts.put(res.getString("device_id"), new HistoryTimer(dateInSeconds, 1000, res.getString("device_id"), res.getString("id_jemuran")).start());
                     }
                     broadcastingID();
                 } catch (ParseException e) {
@@ -237,9 +229,10 @@ public class MyJobService extends JobService {
     @Override
     public boolean onStopJob(JobParameters job) {
         if (!cdts.isEmpty()) {
-            for (int i = 0; i < cdts.size(); i++) {
-                CountDownTimer cTimer = cdts.get(i);
-                cTimer.cancel();
+            for (Map.Entry<String, CountDownTimer> cd : cdts.entrySet()) {
+                String key = cd.getKey();
+                CountDownTimer cdtCancel = cdts.get(key);
+                cdtCancel.cancel();
             }
         }
         getBaseContext().unregisterReceiver(broadcastReceiver);

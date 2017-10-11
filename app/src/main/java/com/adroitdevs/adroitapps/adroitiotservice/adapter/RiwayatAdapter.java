@@ -27,7 +27,7 @@ public class RiwayatAdapter extends RecyclerView.Adapter<RiwayatAdapter.ViewHold
     RiwayatJemur riwayatJemur;
     Fragment contextFrag;
     SimpleDateFormat formatOld = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'", Locale.getDefault());
-    SimpleDateFormat formatNew = new SimpleDateFormat("EEEE dd MMM yyyy", Locale.getDefault());
+    SimpleDateFormat formatNew = new SimpleDateFormat("EEEE dd MMM yyyy HH:mm", Locale.getDefault());
 
     public RiwayatAdapter(Fragment contextFrag, ArrayList<RiwayatJemur> listRiwayat) {
         this.listRiwayat = listRiwayat;
@@ -47,6 +47,7 @@ public class RiwayatAdapter extends RecyclerView.Adapter<RiwayatAdapter.ViewHold
         int time = Integer.parseInt(String.valueOf(TimeUnit.SECONDS.toMinutes(Integer.parseInt(riwayatJemur.estimasi_waktu))));
         holder.waktu.setText(String.valueOf(time) + " menit");
         holder.stat.setText(riwayatJemur.status);
+        holder.deviceId.setText(riwayatJemur.device_id);
         String cahaya = riwayatJemur.cahaya > 200 ? "Terang" : "Cahaya Kurang";
         String hujan = riwayatJemur.hujan > 340 ? "Kering" : "Hujan";
         holder.cahaya.setText("Cahaya : " + cahaya);
@@ -80,7 +81,7 @@ public class RiwayatAdapter extends RecyclerView.Adapter<RiwayatAdapter.ViewHold
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {
-        TextView tgl, stat, waktu, hujan, cahaya, lembab;
+        TextView tgl, stat, waktu, hujan, cahaya, lembab, deviceId;
         View side, circ;
 
         public ViewHolder(View itemView) {
@@ -91,6 +92,7 @@ public class RiwayatAdapter extends RecyclerView.Adapter<RiwayatAdapter.ViewHold
             hujan = (TextView) itemView.findViewById(R.id.hujanRiwayat);
             cahaya = (TextView) itemView.findViewById(R.id.cahayaRiwayat);
             lembab = (TextView) itemView.findViewById(R.id.lembabRiwayat);
+            deviceId = (TextView) itemView.findViewById(R.id.deviceIdRiwayat);
             side = itemView.findViewById(R.id.sideView);
             circ = itemView.findViewById(R.id.bunderan);
         }

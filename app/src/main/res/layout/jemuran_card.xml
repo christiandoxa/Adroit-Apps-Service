@@ -85,6 +85,18 @@
                     android:textStyle="bold"
                     tools:ignore="MissingPrefix" />
 
+                <TextView
+                    android:id="@+id/deviceIdRiwayat"
+                    fontPath="font/Lato-Light.ttf"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="7dp"
+                    android:text="Device Name"
+                    android:textColor="@color/colorLightGray"
+                    android:textSize="12dp"
+                    android:textStyle="bold"
+                    tools:ignore="MissingPrefix" />
+
 
             </LinearLayout>
 

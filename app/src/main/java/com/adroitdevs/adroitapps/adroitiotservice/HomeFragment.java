@@ -50,7 +50,7 @@ import java.util.Map;
  * A simple {@link Fragment} subclass.
  */
 public class HomeFragment extends Fragment implements DeviceAdapter.IDeviceAdapter {
-    private static final String URL = "http://10.100.47.171:3000/";
+    private static final String URL = "http://10.100.100.179:3000/";
     private static final String SAVED_ID = "savedIdArray";
     private static final String SAVED_ID_COUNTDOWN = "savedIdCountdown";
     private static final String SAVED_INDEX = "savedIndexArray";

@@ -40,7 +40,7 @@ import java.util.concurrent.TimeUnit;
 
 public class MyJobService extends JobService {
     public static final String COUNTDOWN_BR = "com.adroitdevs.adroitapps.adroitiotservice";
-    String url = "http://10.100.100.179:3000/history";
+    String url = "http://192.168.88.59:3000/history";
     Date currentTime = Calendar.getInstance().getTime();
     SimpleDateFormat formatOld = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'", Locale.getDefault());
     Intent bi = new Intent(COUNTDOWN_BR);

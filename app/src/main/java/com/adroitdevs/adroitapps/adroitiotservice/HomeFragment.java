@@ -50,7 +50,7 @@ import java.util.Map;
  * A simple {@link Fragment} subclass.
  */
 public class HomeFragment extends Fragment implements DeviceAdapter.IDeviceAdapter {
-    private static final String URL = "http://10.100.100.179:3000/";
+    private static final String URL = "http://192.168.88.59:3000/";
     private static final String SAVED_ID = "savedIdArray";
     private static final String SAVED_ID_COUNTDOWN = "savedIdCountdown";
     private static final String SAVED_INDEX = "savedIndexArray";
@@ -340,7 +340,7 @@ public class HomeFragment extends Fragment implements DeviceAdapter.IDeviceAdapt
             @Override
             public void onResponse(String response) {
                 Log.d("ReqStat", stat);
-                if (stat.equals("angkat") || stat.equals("Manual") || stat.equals("Off")) {
+                if (stat.equals("Off")) {
                     hour.setText("0");
                     minute.setText("0");
                     mListener.stopJob(device.device_id, new VolleyCallback() {
@@ -382,7 +382,7 @@ public class HomeFragment extends Fragment implements DeviceAdapter.IDeviceAdapt
 
                         }
                     });
-                } else if (!stat.equals("On")) {
+                } else {
                     mListener.startJob(device.device_id, new VolleyCallback() {
                         @Override
                         public void onSuccess(boolean result) {

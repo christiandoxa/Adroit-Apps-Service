@@ -57,78 +57,9 @@
             </LinearLayout>
 
             <LinearLayout
-                android:id="@+id/linearsensor"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_below="@+id/linearswitch"
-                android:layout_marginTop="2dp"
-                android:orientation="horizontal">
-
-                <TextView
-                    fontPath="font/Lato-Medium.ttf"
-                    android:layout_width="wrap_content"
-                    android:layout_height="20dp"
-                    android:layout_marginLeft="20dp"
-                    android:gravity="center"
-                    android:text="Otomatis"
-                    android:textColor="@color/colorGray"
-                    android:textSize="14sp"
-                    android:textStyle="bold"
-                    tools:ignore="MissingPrefix" />
-
-                <Switch
-                    android:id="@+id/switchOtomatis"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="@dimen/activity_horizontal_margin" />
-
-            </LinearLayout>
-
-            <LinearLayout
-                android:id="@+id/linearjemur"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_below="@+id/linearsensor"
-                android:layout_marginTop="2dp"
-                android:orientation="horizontal">
-
-                <TextView
-                    fontPath="font/Lato-Medium.ttf"
-                    android:layout_width="wrap_content"
-                    android:layout_height="20dp"
-                    android:layout_marginLeft="20dp"
-                    android:gravity="center"
-                    android:text="Jemur     "
-                    android:textColor="@color/colorGray"
-                    android:textSize="14sp"
-                    android:textStyle="bold"
-                    tools:ignore="MissingPrefix" />
-
-                <Switch
-                    android:id="@+id/switchJemur"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="@dimen/activity_horizontal_margin" />
-
-                <TextView
-                    android:id="@+id/statServo"
-                    fontPath="font/Lato-Medium.ttf"
-                    android:layout_width="wrap_content"
-                    android:layout_height="20dp"
-                    android:layout_marginLeft="20dp"
-                    android:gravity="center"
-                    android:text="Kondisi: Menjemur"
-                    android:textColor="@color/colorGray"
-                    android:textSize="12sp"
-                    android:textStyle="bold"
-                    tools:ignore="MissingPrefix" />
-
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_below="@id/linearjemur"
+                android:layout_below="@id/linearswitch"
                 android:layout_marginBottom="5dp"
                 android:layout_marginTop="5dp"
                 android:orientation="horizontal">

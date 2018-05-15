@@ -29,7 +29,6 @@ import com.adroitdevs.adroitapps.adroitiotservice.model.Device;
 import com.adroitdevs.adroitapps.adroitiotservice.model.RiwayatJemur;
 import com.adroitdevs.adroitapps.adroitiotservice.model.TokenPrefrences;
 import com.adroitdevs.adroitapps.adroitiotservice.service.MyJobService;
-import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
@@ -50,7 +49,7 @@ import java.util.Map;
  * A simple {@link Fragment} subclass.
  */
 public class HomeFragment extends Fragment implements DeviceAdapter.IDeviceAdapter {
-    private static final String URL = "http://10.100.100.179:3000/";
+    private static final String URL = "http://192.168.43.200:3000/";
     private static final String SAVED_ID = "savedIdArray";
     private static final String SAVED_ID_COUNTDOWN = "savedIdCountdown";
     private static final String SAVED_INDEX = "savedIndexArray";
@@ -111,7 +110,7 @@ public class HomeFragment extends Fragment implements DeviceAdapter.IDeviceAdapt
         mListener = (IListener) context;
         View view = inflater.inflate(R.layout.fragment_home, container, false);
 
-        FloatingActionButton fab = (FloatingActionButton) view.findViewById(R.id.fab);
+        FloatingActionButton fab = view.findViewById(R.id.fab);
 
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -121,12 +120,12 @@ public class HomeFragment extends Fragment implements DeviceAdapter.IDeviceAdapt
             }
         });
 
-        listTitle = (TextView) view.findViewById(R.id.TextSub);
-        jemuranList = (TextView) view.findViewById(R.id.listRiwayat);
-        deviceList = (TextView) view.findViewById(R.id.listDevices);
-        hour = (TextView) view.findViewById(R.id.hourTime);
-        minute = (TextView) view.findViewById(R.id.minuteTime);
-        listCountdown = (Spinner) view.findViewById(R.id.deviceSpinner);
+        listTitle = view.findViewById(R.id.TextSub);
+        jemuranList = view.findViewById(R.id.listRiwayat);
+        deviceList = view.findViewById(R.id.listDevices);
+        hour = view.findViewById(R.id.hourTime);
+        minute = view.findViewById(R.id.minuteTime);
+        listCountdown = view.findViewById(R.id.deviceSpinner);
         listCountdown.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
@@ -139,7 +138,7 @@ public class HomeFragment extends Fragment implements DeviceAdapter.IDeviceAdapt
             }
         });
         LinearLayoutManager lm = new LinearLayoutManager(this.getContext());
-        rv = (RecyclerView) view.findViewById(R.id.frame);
+        rv = view.findViewById(R.id.frame);
         rv.setLayoutManager(lm);
         fillData();
         mAdapter = new DeviceAdapter(this, mList);
@@ -279,7 +278,7 @@ public class HomeFragment extends Fragment implements DeviceAdapter.IDeviceAdapt
             }
         }) {
             @Override
-            public Map<String, String> getHeaders() throws AuthFailureError {
+            public Map<String, String> getHeaders() {
                 Map<String, String> head = new HashMap<>();
                 head.put("Content-Type", "application/json");
                 head.put("Authorization", "Bearer " + TokenPrefrences.getToken(context));
@@ -311,14 +310,14 @@ public class HomeFragment extends Fragment implements DeviceAdapter.IDeviceAdapt
             }
         }) {
             @Override
-            protected Map<String, String> getParams() throws AuthFailureError {
+            protected Map<String, String> getParams() {
                 Map<String, String> body = new HashMap<>();
                 body.put("id", idJemuran);
                 return body;
             }
 
             @Override
-            public Map<String, String> getHeaders() throws AuthFailureError {
+            public Map<String, String> getHeaders() {
                 Map<String, String> head = new HashMap<>();
                 head.put("Authorization", "Bearer " + TokenPrefrences.getToken(getContext()));
                 return head;
@@ -410,11 +409,11 @@ public class HomeFragment extends Fragment implements DeviceAdapter.IDeviceAdapt
             public void onErrorResponse(VolleyError error) {
                 callback.onSuccess(false);
                 progressDialog.dismiss();
-                Log.d("ReqStat", error.toString() + " " + stat);
+                Log.d("ReqStat", error.getMessage() + " " + stat);
             }
         }) {
             @Override
-            protected Map<String, String> getParams() throws AuthFailureError {
+            protected Map<String, String> getParams() {
                 Map<String, String> body = new HashMap<>();
                 body.put("id", device.device_id);
                 body.put("job", stat);
@@ -422,7 +421,7 @@ public class HomeFragment extends Fragment implements DeviceAdapter.IDeviceAdapt
             }
 
             @Override
-            public Map<String, String> getHeaders() throws AuthFailureError {
+            public Map<String, String> getHeaders() {
                 Map<String, String> head = new HashMap<>();
                 head.put("Conten-Type", "application/json");
                 head.put("Authorization", "Bearer " + TokenPrefrences.getToken(context));
@@ -459,7 +458,7 @@ public class HomeFragment extends Fragment implements DeviceAdapter.IDeviceAdapt
             }
         }) {
             @Override
-            public Map<String, String> getHeaders() throws AuthFailureError {
+            public Map<String, String> getHeaders() {
                 Map<String, String> head = new HashMap<>();
                 head.put("Conten-Type", "application/json");
                 head.put("Authorization", "Bearer " + TokenPrefrences.getToken(context));

@@ -16,7 +16,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.adroitdevs.adroitapps.adroitiotservice.model.TokenPrefrences;
-import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
@@ -52,14 +51,14 @@ public class SignupActivity extends AppCompatActivity implements GoogleApiClient
         setContentView(R.layout.activity_signup);
 
         Typeface customFont = Typeface.createFromAsset(getAssets(), "font/Lato-Light.ttf");
-        name = (EditText) findViewById(R.id.name);
-        email = (EditText) findViewById(R.id.email);
-        password = (EditText) findViewById(R.id.pass);
-        passwordKonf = (EditText) findViewById(R.id.passconf);
-        conti = (TextView) findViewById(R.id.conti);
-        create = (TextView) findViewById(R.id.create);
-        terms = (TextView) findViewById(R.id.terms);
-        signInButton = (SignInButton) findViewById(R.id.signInButton);
+        name = findViewById(R.id.name);
+        email = findViewById(R.id.email);
+        password = findViewById(R.id.pass);
+        passwordKonf = findViewById(R.id.passconf);
+        conti = findViewById(R.id.conti);
+        create = findViewById(R.id.create);
+        terms = findViewById(R.id.terms);
+        signInButton = findViewById(R.id.signInButton);
         buttonGoogleText = (TextView) signInButton.getChildAt(0);
 
         buttonGoogleText.setText("Masuk dengan Google");
@@ -135,7 +134,7 @@ public class SignupActivity extends AppCompatActivity implements GoogleApiClient
         progressDialog.setCancelable(false);
         progressDialog.setCanceledOnTouchOutside(false);
         progressDialog.show();
-        String url = "http://angkatin.arkademy.com/LoginAwal/SignUp";
+        String url = "http://192.168.43.200:3000/LoginAwal/SignUp";
         StringRequest request = new StringRequest(Request.Method.POST, url, new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
@@ -163,7 +162,7 @@ public class SignupActivity extends AppCompatActivity implements GoogleApiClient
             }
         }) {
             @Override
-            protected Map<String, String> getParams() throws AuthFailureError {
+            protected Map<String, String> getParams() {
                 String emailText = String.valueOf(email.getText());
                 String namaText = String.valueOf(name.getText());
                 String passText = String.valueOf(password.getText());
@@ -224,7 +223,7 @@ public class SignupActivity extends AppCompatActivity implements GoogleApiClient
                 byte[] emailByte = email.getBytes("UTF-8");
                 final String base64Nama = Base64.encodeToString(namaByte, Base64.DEFAULT);
                 final String base64Email = Base64.encodeToString(emailByte, Base64.DEFAULT);
-                String url = "http://angkatin.arkademy.com/LoginAwal/withGmail";
+                String url = "http://192.168.43.200:3000/LoginAwal/withGmail";
                 StringRequest request = new StringRequest(Request.Method.POST, url, new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
@@ -250,7 +249,7 @@ public class SignupActivity extends AppCompatActivity implements GoogleApiClient
                     }
                 }) {
                     @Override
-                    protected Map<String, String> getParams() throws AuthFailureError {
+                    protected Map<String, String> getParams() {
                         Map<String, String> body = new HashMap<>();
                         body.put("name", base64Nama);
                         body.put("email", base64Email);

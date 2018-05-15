@@ -18,7 +18,6 @@ import android.widget.TextView;
 
 import com.adroitdevs.adroitapps.adroitiotservice.model.TokenPrefrences;
 import com.adroitdevs.adroitapps.adroitiotservice.service.MyJobService;
-import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
@@ -39,7 +38,7 @@ import java.util.Map;
 
 public class HomeActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener, HomeFragment.IListener {
-    private final String URL = "http://10.100.100.179:3000/";
+    private final String URL = "http://192.168.43.200:3000/";
     TextView namaUser, emailUser;
     ProgressDialog progressDialog;
     FirebaseJobDispatcher dispatcher;
@@ -50,22 +49,22 @@ public class HomeActivity extends AppCompatActivity
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        DrawerLayout drawer = findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawer.setDrawerListener(toggle);
         toggle.syncState();
 
-        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
+        NavigationView navigationView = findViewById(R.id.nav_view);
         View header = navigationView.getHeaderView(0);
         navigationView.setNavigationItemSelectedListener(this);
         changePage(R.id.nav_camera);
         navigationView.setCheckedItem(R.id.nav_camera);
-        namaUser = (TextView) header.findViewById(R.id.namaUser);
-        emailUser = (TextView) header.findViewById(R.id.emailUser);
+        namaUser = header.findViewById(R.id.namaUser);
+        emailUser = header.findViewById(R.id.emailUser);
 
         dispatcher = new FirebaseJobDispatcher(new GooglePlayDriver(this));
 
@@ -103,7 +102,7 @@ public class HomeActivity extends AppCompatActivity
 
     @Override
     public void onBackPressed() {
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        DrawerLayout drawer = findViewById(R.id.drawer_layout);
         if (drawer.isDrawerOpen(GravityCompat.START)) {
             drawer.closeDrawer(GravityCompat.START);
         } else {
@@ -180,7 +179,7 @@ public class HomeActivity extends AppCompatActivity
             getSupportFragmentManager().beginTransaction()
                     .replace(R.id.container, fragment).commitNow();
 
-            DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+            DrawerLayout drawer = findViewById(R.id.drawer_layout);
             drawer.closeDrawer(GravityCompat.START);
         }
     }
@@ -200,7 +199,7 @@ public class HomeActivity extends AppCompatActivity
             }
         }) {
             @Override
-            public Map<String, String> getHeaders() throws AuthFailureError {
+            public Map<String, String> getHeaders() {
                 Map<String, String> head = new HashMap<>();
                 head.put("Authorization", "Bearer " + TokenPrefrences.getToken(getBaseContext()));
                 return head;
@@ -259,7 +258,7 @@ public class HomeActivity extends AppCompatActivity
             }
         }) {
             @Override
-            protected Map<String, String> getParams() throws AuthFailureError {
+            protected Map<String, String> getParams() {
                 Map<String, String> body = new HashMap<>();
                 body.put("id", id);
                 body.put("date", Calendar.getInstance().getTime().toString());
@@ -267,7 +266,7 @@ public class HomeActivity extends AppCompatActivity
             }
 
             @Override
-            public Map<String, String> getHeaders() throws AuthFailureError {
+            public Map<String, String> getHeaders() {
                 Map<String, String> head = new HashMap<>();
                 head.put("Authorization", "Bearer " + TokenPrefrences.getToken(getBaseContext()));
                 return head;

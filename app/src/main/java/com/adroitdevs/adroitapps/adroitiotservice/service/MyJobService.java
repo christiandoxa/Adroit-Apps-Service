@@ -10,7 +10,6 @@ import android.util.Log;
 import com.adroitdevs.adroitapps.adroitiotservice.VolleyCallback;
 import com.adroitdevs.adroitapps.adroitiotservice.VolleySingleton;
 import com.adroitdevs.adroitapps.adroitiotservice.model.TokenPrefrences;
-import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
@@ -40,7 +39,7 @@ import java.util.concurrent.TimeUnit;
 
 public class MyJobService extends JobService {
     public static final String COUNTDOWN_BR = "com.adroitdevs.adroitapps.adroitiotservice";
-    String url = "http://10.100.100.179:3000/history";
+    String url = "http://192.168.43.200:3000/history";
     Date currentTime = Calendar.getInstance().getTime();
     SimpleDateFormat formatOld = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'", Locale.getDefault());
     Intent bi = new Intent(COUNTDOWN_BR);
@@ -169,14 +168,14 @@ public class MyJobService extends JobService {
             }
         }) {
             @Override
-            protected Map<String, String> getParams() throws AuthFailureError {
+            protected Map<String, String> getParams() {
                 Map<String, String> body = new HashMap<>();
                 body.put("id", idJem);
                 return body;
             }
 
             @Override
-            public Map<String, String> getHeaders() throws AuthFailureError {
+            public Map<String, String> getHeaders() {
                 Map<String, String> head = new HashMap<>();
                 head.put("Authorization", "Bearer " + TokenPrefrences.getToken(getBaseContext()));
                 return head;
@@ -217,7 +216,7 @@ public class MyJobService extends JobService {
             }
         }) {
             @Override
-            public Map<String, String> getHeaders() throws AuthFailureError {
+            public Map<String, String> getHeaders() {
                 Map<String, String> head = new HashMap<>();
                 head.put("Authorization", "Bearer " + TokenPrefrences.getToken(getBaseContext()));
                 return head;

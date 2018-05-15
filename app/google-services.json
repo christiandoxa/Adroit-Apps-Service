@@ -1,43 +1,39 @@
 {
   "project_info": {
-    "project_number": "829263859649",
-    "firebase_url": "https://adroit-apps-service.firebaseio.com",
-    "project_id": "adroit-apps-service",
-    "storage_bucket": "adroit-apps-service.appspot.com"
+    "project_number": "816825236730",
+    "firebase_url": "https://angkatin-b6455.firebaseio.com",
+    "project_id": "angkatin-b6455",
+    "storage_bucket": "angkatin-b6455.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:829263859649:android:545acf442504d052",
+        "mobilesdk_app_id": "1:816825236730:android:545acf442504d052",
         "android_client_info": {
           "package_name": "com.adroitdevs.adroitapps.adroitiotservice"
         }
       },
       "oauth_client": [
         {
-          "client_id": "829263859649-djg89b8hbdfr63f714e4878c2v8feev2.apps.googleusercontent.com",
+          "client_id": "816825236730-f369bbb73uteeaqbd71pc304f1hbf28r.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
             "package_name": "com.adroitdevs.adroitapps.adroitiotservice",
-            "certificate_hash": "f729e2b28fd97f4ddf07071b223be56c29698adc"
+            "certificate_hash": "7eae0878cd0935a42e6035c8e2612262f59ac3be"
           }
         },
         {
-          "client_id": "829263859649-79h5h6b00ui3er3aqpgqqd9h0q2og08t.apps.googleusercontent.com",
-          "client_type": 1,
-          "android_info": {
-            "package_name": "com.adroitdevs.adroitapps.adroitiotservice",
-            "certificate_hash": "a9224cd41435b2bd9449409a5139b68d596b446c"
-          }
+          "client_id": "816825236730-v2ig1dsdm4dmnlcmh9jteh1jl3v7uvtj.apps.googleusercontent.com",
+          "client_type": 3
         },
         {
-          "client_id": "829263859649-jnqj5qiflg4hj4pg60qr5hcqqbsli0qk.apps.googleusercontent.com",
+          "client_id": "816825236730-5s8our8ja45pef42d0ed7n400g87itbp.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyB_YvoP8dBkJSrdfOCKFp42AaLD8wOVrew"
+          "current_key": "AIzaSyBR10p0_4RK1IuF4Le2C4eWej84kuIabWU"
         }
       ],
       "services": {
@@ -48,7 +44,7 @@
           "status": 2,
           "other_platform_oauth_client": [
             {
-              "client_id": "829263859649-jnqj5qiflg4hj4pg60qr5hcqqbsli0qk.apps.googleusercontent.com",
+              "client_id": "816825236730-v2ig1dsdm4dmnlcmh9jteh1jl3v7uvtj.apps.googleusercontent.com",
               "client_type": 3
             }
           ]

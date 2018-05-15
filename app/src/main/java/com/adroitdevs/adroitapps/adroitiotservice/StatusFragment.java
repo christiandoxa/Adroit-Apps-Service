@@ -17,7 +17,6 @@ import android.widget.Toast;
 import com.adroitdevs.adroitapps.adroitiotservice.adapter.DeviceAdapter;
 import com.adroitdevs.adroitapps.adroitiotservice.model.Device;
 import com.adroitdevs.adroitapps.adroitiotservice.model.TokenPrefrences;
-import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
@@ -58,7 +57,7 @@ public class StatusFragment extends Fragment implements DeviceAdapter.IDeviceAda
         // Inflate the layout for this fragment
 
         View view = inflater.inflate(R.layout.fragment_status, container, false);
-        RecyclerView rv = (RecyclerView) view.findViewById(R.id.listDevice);
+        RecyclerView rv = view.findViewById(R.id.listDevice);
         LinearLayoutManager lm = new LinearLayoutManager(this.getContext());
         rv.setLayoutManager(lm);
         mAdapter = new DeviceAdapter(this, mList);
@@ -74,7 +73,7 @@ public class StatusFragment extends Fragment implements DeviceAdapter.IDeviceAda
         progressDialog.setCancelable(false);
         progressDialog.setCanceledOnTouchOutside(false);
         progressDialog.show();
-        String url = "http://angkatin.arkademy.com/UserAPI/profile";
+        String url = "http://192.168.43.200:3000/UserAPI/profile";
         JsonObjectRequest request = new JsonObjectRequest(Request.Method.GET, url, null, new Response.Listener<JSONObject>() {
             @Override
             public void onResponse(JSONObject response) {
@@ -103,7 +102,7 @@ public class StatusFragment extends Fragment implements DeviceAdapter.IDeviceAda
             }
         }) {
             @Override
-            public Map<String, String> getHeaders() throws AuthFailureError {
+            public Map<String, String> getHeaders() {
                 Map<String, String> head = new HashMap<>();
                 head.put("Conten-Type", "application/json");
                 head.put("KEY", TokenPrefrences.getToken(context));
@@ -115,7 +114,7 @@ public class StatusFragment extends Fragment implements DeviceAdapter.IDeviceAda
 
     @Override
     public void status(final String stat, final int id, final VolleyCallback callback) {
-        String url = "http://angkatin.arkademy.com/UserAPI";
+        String url = "http://192.168.43.200:3000/UserAPI";
         final Device device = mList.get(id);
         progressDialog = new ProgressDialog(this.getContext());
         progressDialog.setMessage("Loading...");
@@ -138,7 +137,7 @@ public class StatusFragment extends Fragment implements DeviceAdapter.IDeviceAda
             }
         }) {
             @Override
-            protected Map<String, String> getParams() throws AuthFailureError {
+            protected Map<String, String> getParams() {
                 Map<String, String> body = new HashMap<>();
                 body.put("id", device.device_id);
                 body.put("job", stat);
@@ -146,7 +145,7 @@ public class StatusFragment extends Fragment implements DeviceAdapter.IDeviceAda
             }
 
             @Override
-            public Map<String, String> getHeaders() throws AuthFailureError {
+            public Map<String, String> getHeaders() {
                 Map<String, String> head = new HashMap<>();
                 head.put("Conten-Type", "application/json");
                 head.put("KEY", TokenPrefrences.getToken(context));

@@ -14,18 +14,20 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.adroitdevs.adroitapps.adroitiotservice.model.TokenPrefrences;
-import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.google.android.gms.auth.api.Auth;
+import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
+import com.google.android.gms.auth.api.signin.GoogleSignInClient;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
-import com.google.android.gms.auth.api.signin.GoogleSignInResult;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.SignInButton;
+import com.google.android.gms.common.api.ApiException;
 import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.iid.FirebaseInstanceId;
 
 import org.json.JSONException;
@@ -39,12 +41,13 @@ public class SigninActivity extends AppCompatActivity implements GoogleApiClient
 
     private static final String TAG = SigninActivity.class.getSimpleName();
     private static final int RC_SIGN_IN = 778;
-    private static final String URL = "http://10.100.100.179:3000/";
+    private static final String URL = "http://192.168.43.200:3000/";
     EditText email, pass;
     TextView signin, create, buttonGoogleText;
     SignInButton signInButton;
     ProgressDialog progressDialog;
     private GoogleApiClient mGoogleApiClient;
+    GoogleSignInClient mGoogleSignIn;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -59,11 +62,11 @@ public class SigninActivity extends AppCompatActivity implements GoogleApiClient
 
         Typeface customFont = Typeface.createFromAsset(getAssets(), "font/Lato-Light.ttf");
 
-        email = (EditText) findViewById(R.id.email);
-        pass = (EditText) findViewById(R.id.pass);
-        signin = (TextView) findViewById(R.id.signin);
-        create = (TextView) findViewById(R.id.Create);
-        signInButton = (SignInButton) findViewById(R.id.signInButton);
+        email = findViewById(R.id.email);
+        pass = findViewById(R.id.pass);
+        signin = findViewById(R.id.signin);
+        create = findViewById(R.id.Create);
+        signInButton = findViewById(R.id.signInButton);
         buttonGoogleText = (TextView) signInButton.getChildAt(0);
 
         buttonGoogleText.setText("Masuk dengan Google");
@@ -81,6 +84,8 @@ public class SigninActivity extends AppCompatActivity implements GoogleApiClient
                 .enableAutoManage(this, this)
                 .addApi(Auth.GOOGLE_SIGN_IN_API, gso)
                 .build();
+
+        mGoogleSignIn = GoogleSignIn.getClient(this, gso);
 
         create.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -139,7 +144,7 @@ public class SigninActivity extends AppCompatActivity implements GoogleApiClient
             }
         }) {
             @Override
-            protected Map<String, String> getParams() throws AuthFailureError {
+            protected Map<String, String> getParams() {
                 String regToken = FirebaseInstanceId.getInstance().getToken();
                 String emailText = String.valueOf(email.getText());
                 String passText = String.valueOf(pass.getText());
@@ -165,7 +170,7 @@ public class SigninActivity extends AppCompatActivity implements GoogleApiClient
     }
 
     private void signIn() {
-        Intent signInIntent = Auth.GoogleSignInApi.getSignInIntent(mGoogleApiClient);
+        Intent signInIntent = mGoogleSignIn.getSignInIntent();
         startActivityForResult(signInIntent, RC_SIGN_IN);
     }
 
@@ -173,19 +178,19 @@ public class SigninActivity extends AppCompatActivity implements GoogleApiClient
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == RC_SIGN_IN) {
-            GoogleSignInResult result = Auth.GoogleSignInApi.getSignInResultFromIntent(data);
+            Task<GoogleSignInAccount> task = GoogleSignIn.getSignedInAccountFromIntent(data);
             try {
-                handleSignInResult(result);
+                handleSignInResult(task);
             } catch (UnsupportedEncodingException e) {
                 e.printStackTrace();
+                Log.e(TAG, e.getMessage());
             }
         }
     }
 
-    private void handleSignInResult(GoogleSignInResult result) throws UnsupportedEncodingException {
-        Log.d(TAG, "handleSignInResult: " + result.isSuccess());
-        if (result.isSuccess()) {
-            GoogleSignInAccount account = result.getSignInAccount();
+    private void handleSignInResult(Task<GoogleSignInAccount> completedTask) throws UnsupportedEncodingException {
+        try {
+            GoogleSignInAccount account = completedTask.getResult(ApiException.class);
             if (account != null) {
                 progressDialog = new ProgressDialog(this);
                 progressDialog.setCancelable(false);
@@ -224,7 +229,7 @@ public class SigninActivity extends AppCompatActivity implements GoogleApiClient
                     }
                 }) {
                     @Override
-                    protected Map<String, String> getParams() throws AuthFailureError {
+                    protected Map<String, String> getParams() {
                         String regToken = FirebaseInstanceId.getInstance().getToken();
                         Map<String, String> body = new HashMap<>();
                         body.put("name", base64Nama);
@@ -235,8 +240,8 @@ public class SigninActivity extends AppCompatActivity implements GoogleApiClient
                 };
                 VolleySingleton.getInstance(this).addToRequestQueue(request);
             }
-        } else {
-            Toast.makeText(this, "Login fail", Toast.LENGTH_SHORT).show();
+        } catch (ApiException e) {
+            Log.e(TAG, e.getMessage());
         }
     }
 

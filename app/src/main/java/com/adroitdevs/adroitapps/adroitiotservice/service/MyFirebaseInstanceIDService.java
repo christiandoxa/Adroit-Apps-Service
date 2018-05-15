@@ -4,7 +4,6 @@ import android.util.Log;
 
 import com.adroitdevs.adroitapps.adroitiotservice.VolleySingleton;
 import com.adroitdevs.adroitapps.adroitiotservice.model.TokenPrefrences;
-import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
@@ -36,7 +35,7 @@ public class MyFirebaseInstanceIDService extends FirebaseInstanceIdService {
 
     private void sendToServer(String regToken) {
         token = regToken;
-        String url = "http://10.100.100.179:3000/profile";
+        String url = "http://192.168.43.200:3000/profile";
         StringRequest request = new StringRequest(Request.Method.PUT, url, new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
@@ -60,14 +59,14 @@ public class MyFirebaseInstanceIDService extends FirebaseInstanceIdService {
             }
         }) {
             @Override
-            protected Map<String, String> getParams() throws AuthFailureError {
+            protected Map<String, String> getParams() {
                 Map<String, String> body = new HashMap<>();
                 body.put("regToken", token);
                 return body;
             }
 
             @Override
-            public Map<String, String> getHeaders() throws AuthFailureError {
+            public Map<String, String> getHeaders() {
                 Map<String, String> head = new HashMap<>();
                 head.put("Content-type", "application/json");
                 head.put("Authorization", TokenPrefrences.getToken(getBaseContext()));

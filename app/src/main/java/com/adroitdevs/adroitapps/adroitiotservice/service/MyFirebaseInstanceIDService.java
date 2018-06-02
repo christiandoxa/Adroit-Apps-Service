@@ -35,7 +35,7 @@ public class MyFirebaseInstanceIDService extends FirebaseInstanceIdService {
 
     private void sendToServer(String regToken) {
         token = regToken;
-        String url = "http://192.168.43.200:3000/profile";
+        String url = "http://192.168.43.200:3001/profile";
         StringRequest request = new StringRequest(Request.Method.PUT, url, new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {

@@ -73,7 +73,7 @@ public class StatusFragment extends Fragment implements DeviceAdapter.IDeviceAda
         progressDialog.setCancelable(false);
         progressDialog.setCanceledOnTouchOutside(false);
         progressDialog.show();
-        String url = "http://192.168.43.200:3000/UserAPI/profile";
+        String url = "http://192.168.43.200:3001/UserAPI/profile";
         JsonObjectRequest request = new JsonObjectRequest(Request.Method.GET, url, null, new Response.Listener<JSONObject>() {
             @Override
             public void onResponse(JSONObject response) {
@@ -114,7 +114,7 @@ public class StatusFragment extends Fragment implements DeviceAdapter.IDeviceAda
 
     @Override
     public void status(final String stat, final int id, final VolleyCallback callback) {
-        String url = "http://192.168.43.200:3000/UserAPI";
+        String url = "http://192.168.43.200:3001/UserAPI";
         final Device device = mList.get(id);
         progressDialog = new ProgressDialog(this.getContext());
         progressDialog.setMessage("Loading...");

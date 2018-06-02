@@ -38,7 +38,7 @@ import java.util.Map;
 
 public class HomeActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener, HomeFragment.IListener {
-    private final String URL = "http://192.168.43.200:3000/";
+    private final String URL = "http://192.168.43.200:3001/";
     TextView namaUser, emailUser;
     ProgressDialog progressDialog;
     FirebaseJobDispatcher dispatcher;
